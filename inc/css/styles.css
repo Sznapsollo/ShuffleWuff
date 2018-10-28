@@ -1,0 +1,85 @@
+a {
+	cursor: pointer;
+}
+
+.saveDictionaryLink {
+	color: red;
+	font-weight: 700;
+}
+
+.highlightText {
+	background: #FFFBCC;
+}
+
+#dictionaryList li:nth-child(even){
+	background-color: #f8f9fa;
+}
+
+#dictionaryList .list-group-item:hover {
+	background-image: linear-gradient(#eeeeee, white);
+	font-weight: 700;
+}
+
+#shuffleBox {
+	width: 80%; margin: auto auto;
+}
+
+#shuffleBox .container {
+	text-align: center;
+	padding: 15px;
+}
+
+#shuffleBox .container h1{
+	font-size: 3.3rem;
+	padding: 20px;
+}
+
+#shuffleBox .score{
+	padding: 0px 5px;
+	font-weight: 700;
+}
+
+#shuffleBox .points{
+	padding: 0px 5px;
+	font-size: 20pt;
+}
+
+.goodScores {
+	color: green;
+}
+
+.badScores {
+	color: red;
+}
+
+@-moz-keyframes spin { 100% { -moz-transform: rotate(360deg); } }
+@-webkit-keyframes spin { 100% { -webkit-transform: rotate(360deg); } }
+@keyframes spin { 100% { -webkit-transform: rotate(360deg); transform:rotate(360deg); } }
+
+@-webkit-keyframes shaking {
+	0% { -webkit-transform: translate(2px, 1px) rotate(0deg); }
+	10% { -webkit-transform: translate(-1px, -2px) rotate(-1deg); }
+	20% { -webkit-transform: translate(-3px, 0px) rotate(1deg); }
+	30% { -webkit-transform: translate(0px, 2px) rotate(0deg); }
+	40% { -webkit-transform: translate(1px, -1px) rotate(1deg); }
+	50% { -webkit-transform: translate(-1px, 2px) rotate(-1deg); }
+	60% { -webkit-transform: translate(-3px, 1px) rotate(0deg); }
+	70% { -webkit-transform: translate(2px, 1px) rotate(-1deg); }
+	80% { -webkit-transform: translate(-1px, -1px) rotate(1deg); }
+	90% { -webkit-transform: translate(2px, 2px) rotate(0deg); }
+	100% { -webkit-transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+
+.spinEffect {
+	-webkit-animation:spin 0.4s ease-in-out;
+	-moz-animation:spin 0.4s ease-in-out;
+	animation:spin 0.4s ease-in-out;
+}
+
+.shakeEffect {
+	-webkit-animation:shaking 0.4s ease-in-out;
+	-moz-animation:shaking 0.4s ease-in-out;
+	animation:shaking 0.4s ease-in-out;
+}
+
