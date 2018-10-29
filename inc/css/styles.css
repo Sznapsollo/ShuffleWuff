@@ -44,6 +44,11 @@ a {
 	font-size: 20pt;
 }
 
+#shuffledWord {
+	min-height: 105px;
+	display: inline-block;
+}
+
 .goodScores {
 	color: green;
 }
