@@ -20,7 +20,7 @@ Vue.component('word-popup', {
 						</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<p><input type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText'></p>
+							<p><form autocomplete="off" onsubmit="return;"><input id="wordPopupTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText' style="-webkit-user-modify: read-write-plaintext-only;"></form></p>
 						</div>
 						{{errorMessage}}
 					</div>
