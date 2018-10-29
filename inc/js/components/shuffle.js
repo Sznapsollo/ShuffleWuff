@@ -10,7 +10,7 @@ const Shuffle = {
 				</div>
 				<div class="container">
 					Points:<span class="score points" v-bind:class="{ goodScores: points > 0, badScores: points < 0 }">{{points}}</span>
-					Attempts:<span class="score">{{attempts}}</span>
+					Word No.:<span class="score">{{displayed}}</span>
 					Score:<span class="score points">{{score}}%</span>
 				</div>
 				<div class="container">
@@ -28,7 +28,9 @@ const Shuffle = {
 			</div>`,
 		data: function() {
 			return {
+				processing: false,
 				word : "",
+				displayed: 0,
 				attempts: 0,
 				points: 0,
 				score: 0,
@@ -43,6 +45,7 @@ const Shuffle = {
 		methods: {
 			calculateScore: function(isCorrect) {
 				var currObject = this;
+				this.attempts++;
 				
 				if(isCorrect)
 					this.correctAnswers++;
@@ -70,7 +73,7 @@ const Shuffle = {
 			shuffleWord: function () {
 				var currObj = this;
 				this.word = sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
-				this.attempts++;
+				this.displayed++;
 
 				setTimeout(function () {
 					var container = $("#shuffledWord");
@@ -83,6 +86,7 @@ const Shuffle = {
 				this.points = 0;
 				this.attempts = 0;
 				this.score = 0;
+				this.displayed = 0;
 				this.correctAnswers = 0;
 				this.incorrectAnswers = 0;
 			}
