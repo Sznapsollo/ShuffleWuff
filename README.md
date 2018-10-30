@@ -1,11 +1,39 @@
-# ShuffleWuff
-English language learning Tool for kids. 
+# ShuffleWuff 
 
-This is platform I build to do fun and efficient English lessons with my son. 
+## About
+
+ShuffleWuff is language learning Tool for kids. I build to do fun and efficient English lessons with my son. 
 
 It is Vue.js single page app, easily deployable requires just any web server. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect.
 
-More description will follow soon (I hope ;-))
-
 ## Demo
-**<a href="http://cultrides.com/test/Github/ShuffleWuff" target="_blank">Click here to see Demo</a>** - of course adding new words and deleting existing dictionary items will not work in demo since its data file is shared for everyone.
+**<a href="http://cultrides.com/test/Github/ShuffleWuff" target="_blank">Click here to see Demo</a>** - of course adding new words and deleting existing dictionary items will not work in demo since its data file is shared for everyone. Demo contains example data which is also present in this repository under "dictionary/data.txt". It cannot be changed in demo but you would be able to change it if you hosted ShuffleWuff yourself and your server would have access to "dictionary/data.txt" file.
+
+## How I use it
+
+So I have english lessons with my son. The way it works is that we have whiteboard and every lesson we use it to write down words that are new or require revisiting. After a couple of lessons table is full and at that point I write down the words - originally I was just putting them on some excel sheet but soon it turned out to be really boring and pointless - I ended up repeating same words and it was not that easy to look through them. So now I am putting new words and phrases into this tool - see "Add new word" navbar option. It allows quick entry/edit and also browsing is convenient - see "Dictionary" navbar option. It does not allow to introduce words that already are in dictionary.
+
+To make remembering words and new phrases more efficient, at the end of every lesson, we make some exercises using "shuffle" mode - see "Shuffle" navbar option. What I do is we shuffle a word and then my son gives me its definition and pronunciation and some examples of how he would use it in some life scenarios. If he does good he gets "Good Score" once or even more depending on what we agreed. If he does not remember the word he should repeat it but gets "Bad Score".
+
+In the end final score is used to determine what fun stuff we would do later on. The better the score the more treat would the young one get. 
+
+This is how I do it. Perhaps you will also find it suit the way you teach your kid. Just please remember it is meant to be fun. 
+
+## What you need to run it
+
+You need any webserver to host the site. I host it in my local home network on Raspberry PI but any webserver would. do.
+
+## Where is data stored
+
+Data is stored in plain text file. The file is located in **<a href="https://github.com/Sznapsollo/ShuffleWuff/blob/master/dictionary/data.txt" target="_blank">"dictionary/data.txt"</a>** path. Each line is new word. This GitHub repository contains example file with example data - you can just delete all of it and introduce your content- through ShuffleWuff UI or just by directly changing this file content.
+
+What is worth mentioning is that single text file as datasource is extremely convenient for single uses because it does not require any setup for databases etc.
+
+However if it was used by few "lessons" at the same time and each of the lessons would perform saving at the same time this could lead to some data inconsistencies. If you wanted to run ShuffleWuff in few places at the same time I think it would be better idea to switch it to database data source.
+
+## Notes
+
+ShuffleWuff displays these "play" icons next to each word/phrase. These are links to Google Translator reading API. Unfortunately this API is not official and Google actually blocks it when you run it from any website. So when you click on such icon you will get new tab but most probably it will display "404" error. But fear not! ;-) ... you can actually still hear the work you just have to hit refresh button and if this still does not help (in some cases it works) you just need to focus on tab url and hit enter to sort of introduce url to the tab - then it will definitely work. Perhaps some day I will make it work but so far I did not find working solution and I have not much motivation to do so really...I do not use this option often - it is just feature.
+
+Take care! 
+Wanna touch base? office@webproject.waw.pl

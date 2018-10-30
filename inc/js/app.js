@@ -12,6 +12,7 @@ const router = new VueRouter({
   base: '',
   routes: [
     { path: '/dictionary', name: 'dictionary', component: Dictionary },
+    { path: '/about', name: 'about', component: About },
     { path: '/', name: 'shuffle', component: Shuffle }
   ]
 })
