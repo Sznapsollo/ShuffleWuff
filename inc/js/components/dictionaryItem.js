@@ -2,7 +2,7 @@ Vue.component('dictionary-list-item', {
 	props: ['index', 'item', 'searchPhrase'],
 	template: `
 		<li class="list-group-item">
-			<a target="_self" v-bind:href="'#item-'+index" data-toggle="collapse" class="text-dark" >
+			<a target="_self" v-bind:href="'#item-'+index" data-toggle="collapse" class="text-dark" style="display: inline-block; width: 90%">
 				<i class="glyphicon glyphicon-chevron-right"></i>
 				<span v-html="highlight(item)"></span>
 			</a>

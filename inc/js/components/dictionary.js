@@ -6,7 +6,10 @@ const Dictionary = {
 					&nbsp;
 					<button type="button" class="btn btn-light" v-bind:class="{ active: sortOrder==2 }" v-on:click="sortOrder=2">Sort Desc</button>
 					&nbsp;
-					<input v-model="searchPhrase" placeholder="search" type="text" class="form-control" />
+					<div class="btn-group">
+						<input id="searchinput" v-model="searchPhrase" placeholder="search" type="search" class="form-control" />
+						<i v-if="searchPhrase.length > 0" id="searchclear" v-on:click="searchPhrase=''" class="fa fa-times-circle"></i>
+					</div>
 					<span style="padding-left: 10px">words: <strong>{{dictionaryListData.length}}</strong></span>
 				</div>
 				<ul id="dictionaryList" class="list-group">

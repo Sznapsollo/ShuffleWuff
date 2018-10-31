@@ -3,18 +3,27 @@ Vue.use(VueRouter)
 // temporary
 
 const sharedDictionaryData = {
-  items: [],
-  loaded: false
+	items: [],
+	loaded: false
+}
+
+const score = {
+	displayed: 0,
+	attempts: 0,
+	points: 0,
+	score: 0,
+	correctAnswers: 0,
+	incorrectAnswers: 0
 }
 
 const router = new VueRouter({
-  mode: 'hash',
-  base: '',
-  routes: [
-    { path: '/dictionary', name: 'dictionary', component: Dictionary },
-    { path: '/about', name: 'about', component: About },
-    { path: '/', name: 'shuffle', component: Shuffle }
-  ]
+	mode: 'hash',
+	base: '',
+	routes: [
+		{ path: '/dictionary', name: 'dictionary', component: Dictionary },
+		{ path: '/about', name: 'about', component: About },
+		{ path: '/', name: 'shuffle', component: Shuffle }
+	]
 })
 
 var vm = new Vue({
@@ -22,12 +31,13 @@ var vm = new Vue({
 	data: {
 		sharedDictionaryData,
 		dictionaryNeedsSaving: false,
-		requestInProgress: false
+		requestInProgress: false,
+		servicesAddress: '/data/Services.php'
 	},
 	methods: {
 		loadDictionaryData: function() {
 			this.requestInProgress = true;
-			this.$http.post('/data/Services.php', {
+			this.$http.post(this.servicesAddress, {
 			  service: "CheckDictionaryData",
 			  receive: true
 			}).then(response => {
@@ -45,7 +55,7 @@ var vm = new Vue({
 		},
 		saveDictionaryData: function() {
 			this.requestInProgress = true;
-			this.$http.post('/data/Services.php', {
+			this.$http.post(this.servicesAddress, {
 			  service: "SaveDictionaryData",
 			  items: JSON.stringify(this.sharedDictionaryData.items),
 			  receive: true

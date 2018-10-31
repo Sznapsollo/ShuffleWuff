@@ -9,9 +9,9 @@ const Shuffle = {
 					<i v-if="!sharedDictionaryData.loaded" class="fa fa-cog fa-2x fa-spin"></i>
 				</div>
 				<div class="container">
-					Points:<span class="score points" v-bind:class="{ goodScores: points > 0, badScores: points < 0 }">{{points}}</span>
-					Word No.:<span class="score">{{displayed}}</span>
-					Score:<span class="score points">{{score}}%</span>
+					Points:<span class="score points" v-bind:class="{ goodScores: score.points > 0, badScores: score.points < 0 }">{{score.points}}</span>
+					Word No.:<span class="score">{{score.displayed}}</span>
+					Score:<span class="score points">{{score.score}}%</span>
 				</div>
 				<div class="container">
 					<button type="button" class="btn btn-success btn-lg" v-on:click="calculateScore(true)">Good answer</button>
@@ -23,37 +23,32 @@ const Shuffle = {
 				</div>
 				<div class="container">
 					<input type="checkbox" name="automatic_shuffle" id="automatic_shuffle_chbx" v-model="automaticShuffle">
-					<label for="checkbox_id">Shuffle automatically after score</label>
+					<label style="cursor: pointer" for="automatic_shuffle_chbx">Shuffle automatically after score</label>
 				</div>
 			</div>`,
 		data: function() {
 			return {
 				processing: false,
 				word : "",
-				displayed: 0,
-				attempts: 0,
-				points: 0,
-				score: 0,
 				goodPoints: 10,
 				minusPoints: 5,
-				correctAnswers: 0,
-				incorrectAnswers: 0,
 				automaticShuffle: true,
-				sharedDictionaryData
+				sharedDictionaryData,
+				score
 			}
 		},
 		methods: {
 			calculateScore: function(isCorrect) {
 				var currObject = this;
-				this.attempts++;
+				this.score.attempts++;
 				
 				if(isCorrect)
-					this.correctAnswers++;
+					this.score.correctAnswers++;
 				else
-					this.incorrectAnswers++;
+					this.score.incorrectAnswers++;
 				
-				this.points = this.correctAnswers*this.goodPoints - this.incorrectAnswers*this.minusPoints;
-				this.score = this.attempts == 0 ? 0 : ((100*this.correctAnswers)/(this.attempts)).toFixed(0);
+				this.score.points = this.score.correctAnswers*this.goodPoints - this.score.incorrectAnswers*this.minusPoints;
+				this.score.score = this.score.attempts == 0 ? 0 : ((100*this.score.correctAnswers)/(this.score.attempts)).toFixed(0);
 				
 				var whatEffect = isCorrect ? "spinEffect" : "shakeEffect";
 				var whatScores = isCorrect ? "goodScores" : "badScores";
@@ -73,7 +68,7 @@ const Shuffle = {
 			shuffleWord: function () {
 				var currObj = this;
 				this.word = sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
-				this.displayed++;
+				this.score.displayed++;
 
 				setTimeout(function () {
 					var container = $("#shuffledWord");
@@ -83,12 +78,12 @@ const Shuffle = {
 					});
 			},
 			cleanScore: function() {
-				this.points = 0;
-				this.attempts = 0;
-				this.score = 0;
-				this.displayed = 0;
-				this.correctAnswers = 0;
-				this.incorrectAnswers = 0;
+				this.score.points = 0;
+				this.score.attempts = 0;
+				this.score.score = 0;
+				this.score.displayed = 0;
+				this.score.correctAnswers = 0;
+				this.score.incorrectAnswers = 0;
 			}
 		},
 		created: function() {
