@@ -167,6 +167,7 @@ it is windy
 job
 kick
 kindergarden
+king
 kitchen
 knife
 know
@@ -179,11 +180,10 @@ let's
 letter
 light
 lights
-ling
 lips
 little
 living room
-lolipop
+lollipop
 long
 love
 low
@@ -270,7 +270,6 @@ rule
 run
 sad
 salt
-same
 sand
 sandwich
 saturday
@@ -319,6 +318,7 @@ that
 the last
 the least
 the most
+the same
 the tallest
 there
 they are

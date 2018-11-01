@@ -75,15 +75,22 @@ const Shuffle = {
 					container.shuffleLetters({
 						"text": currObj.word
 					});
-					});
+				});
 			},
 			cleanScore: function() {
-				this.score.points = 0;
-				this.score.attempts = 0;
-				this.score.score = 0;
-				this.score.displayed = 0;
-				this.score.correctAnswers = 0;
-				this.score.incorrectAnswers = 0;
+				var currentObj = this;
+				$(".score").addClass("hidden");
+				
+				setTimeout(function() {
+					currentObj.score.points = 0;
+					currentObj.score.attempts = 0;
+					currentObj.score.score = 0;
+					currentObj.score.displayed = 0;
+					currentObj.score.correctAnswers = 0;
+					currentObj.score.incorrectAnswers = 0;
+					
+					$(".score").removeClass("hidden");
+				}, 500)
 			}
 		},
 		created: function() {
