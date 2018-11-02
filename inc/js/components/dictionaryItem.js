@@ -6,7 +6,7 @@ Vue.component('dictionary-list-item', {
 				<i class="glyphicon glyphicon-chevron-right"></i>
 				<span v-html="highlight(item)"></span>
 			</a>
-			<a style="float: right" target="_blank" v-bind:href="'https://translate.google.com/translate_tts?ie=UTF-8&tl=en-US&client=tw-ob&q='+item"><i class="fa fa-play-circle-o"></i></a>
+			<a style="float: right" target="_blank"  v-bind:href="prepareTranslatorLink(item)"><i class="fa fa-play-circle-o"></i></a>
 			
 			<div class="list-group collapse" v-bind:id="'item-'+index" style="text-align: center">    
 				<ul class="list-inline">

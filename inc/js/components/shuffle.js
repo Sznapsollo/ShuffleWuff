@@ -4,7 +4,7 @@ const Shuffle = {
 				<div class="container result">
 					<div v-if="sharedDictionaryData.loaded">
 						<h1 id="shuffledWord" >&nbsp;</h1>
-						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="'https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURI(word)+'&tl=en&client=tw-ob'"><i class="fa fa-2x fa-play-circle-o"></i></a>
+						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="prepareTranslatorLink(word)"><i class="fa fa-2x fa-play-circle-o"></i></a>
 					</div>
 					<i v-if="!sharedDictionaryData.loaded" class="fa fa-cog fa-2x fa-spin"></i>
 				</div>

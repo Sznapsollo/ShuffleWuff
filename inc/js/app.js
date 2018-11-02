@@ -1,5 +1,13 @@
 Vue.use(VueRouter)
 
+Vue.mixin({
+	methods: {
+	prepareTranslatorLink: function(item) {
+		return 'https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURI(item.replace(/\_/g, ' '))+'&tl=en&client=tw-ob';
+	}
+	}
+})
+
 // temporary
 
 const sharedDictionaryData = {
@@ -118,7 +126,7 @@ var vm = new Vue({
 				
 				$('#wordModal').modal('toggle');
 			}
-		},
+		}
 	},
 	created: function() {
 		this.loadDictionaryData();
