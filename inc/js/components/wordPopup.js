@@ -17,7 +17,7 @@ Vue.component('word-popup', {
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 							<span aria-hidden="true">&times;</span>
 						</button>
-						</div>
+					</div>
 					<div class="modal-body">
 						<div class="form-group">
 							<p><form autocomplete="off" onsubmit="return;"><input id="wordPopupTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText' style="-webkit-user-modify: read-write-plaintext-only;"></form></p>
