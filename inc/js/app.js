@@ -125,6 +125,7 @@ var vm = new Vue({
 				// end hack
 				
 				$('#wordModal').modal('toggle');
+				this.$emit('clearEdit', true);
 			}
 		}
 	},

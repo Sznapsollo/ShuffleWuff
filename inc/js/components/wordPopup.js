@@ -20,7 +20,11 @@ Vue.component('word-popup', {
 					</div>
 					<div class="modal-body">
 						<div class="form-group">
-							<p><form autocomplete="off" onsubmit="return;"><input id="wordPopupTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText' style="-webkit-user-modify: read-write-plaintext-only;"></form></p>
+							<p>
+								<form autocomplete="off" onsubmit="return;">
+									<input id="wordPopupTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText' style="-webkit-user-modify: read-write-plaintext-only;" @keyup.enter="enterClicked" placeholder="Your word here">
+								</form>
+							</p>
 						</div>
 						{{errorMessage}}
 					</div>
@@ -38,6 +42,16 @@ Vue.component('word-popup', {
 		},
 		canSave: function() {
 			return this.errorMessage.length == 0;
+		},
+		clearForm: function() {
+			this.initialText = '';
+			this.itemText = '';
+			this.header = ''
+			console.log('cleared');
+		},
+		enterClicked(){
+			if(this.canSave() && !this.sameAsInitial())
+				this.saveWord();
 		},
 		sameAsInitial: function() {
 			return this.itemText.toLowerCase() === this.initialText.toLowerCase();
@@ -73,6 +87,11 @@ Vue.component('word-popup', {
 			currentObj.initialText = popupInfo.item;
 			currentObj.itemText = popupInfo.item;
 			currentObj.header = popupInfo.header
-		}) 
+			
+			setTimeout(function(){$('#wordPopupTextBox').focus();},400);
+		});
+		this.$root.$on('clearEdit', function(){
+			currentObj.clearForm();
+		})
 	}
 })
