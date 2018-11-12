@@ -29,16 +29,17 @@ Vue.component('word-popup', {
 						{{errorMessage}}
 					</div>
 					<div class="modal-footer">
-						<button type="button" :disabled="!canSave() || sameAsInitial()" v-on:click="saveWord()" class="btn btn-primary">Save changes</button>
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						<button type="button" :disabled="!canSave() || sameAsInitial()" v-on:click="saveWord(false)" class="btn btn-primary">Save changes</button>
+						<button type="button" :disabled="!canSave() || sameAsInitial()" v-on:click="saveWord(true)" class="btn btn-secondary">Add another</button>
+						<!--<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>-->
 					</div>
 				</div>
 			</div>
 		</div>
 	`,
 	methods: {
-		saveWord: function() {
-			return this.$root.$emit('saveWord', this.initialText, this.itemText);
+		saveWord: function(addAnother) {
+			return this.$root.$emit('saveWord', this.initialText, this.itemText, addAnother);
 		},
 		canSave: function() {
 			return this.errorMessage.length == 0;

@@ -34,7 +34,9 @@ const Shuffle = {
 				minusPoints: 5,
 				automaticShuffle: true,
 				sharedDictionaryData,
-				score
+				score,
+				correctAnswerStyles: ["spinRightEffect","spinLeftEffect"],
+				incorrectAnswerStyles: ["shakeEffect"]
 			}
 		},
 		methods: {
@@ -50,7 +52,7 @@ const Shuffle = {
 				this.score.points = this.score.correctAnswers*this.goodPoints - this.score.incorrectAnswers*this.minusPoints;
 				this.score.score = this.score.attempts == 0 ? 0 : ((100*this.score.correctAnswers)/(this.score.attempts)).toFixed(0);
 				
-				var whatEffect = isCorrect ? "spinEffect" : "shakeEffect";
+				var whatEffect = isCorrect ? this.randomEffect(this.correctAnswerStyles) : this.randomEffect(this.incorrectAnswerStyles);
 				var whatScores = isCorrect ? "goodScores" : "badScores";
 				
 				$(".result h1").addClass(whatEffect);
@@ -64,6 +66,9 @@ const Shuffle = {
 						currObject.shuffleWord();
 					}
 				}, 1000)
+			},
+			randomEffect: function(items) {
+				return items[Math.floor(Math.random()*items.length)];
 			},
 			shuffleWord: function () {
 				var currObj = this;

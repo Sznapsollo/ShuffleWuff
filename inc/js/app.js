@@ -3,7 +3,7 @@ Vue.use(VueRouter)
 Vue.mixin({
 	methods: {
 	prepareTranslatorLink: function(item) {
-		return 'https://translate.google.com/translate_tts?ie=UTF-8&q='+encodeURI(item.replace(/\_/g, ' '))+'&tl=en&client=tw-ob';
+		return settings.translatorAddress()+encodeURI(item.replace(/\_/g, ' '))+'&tl=en&client=tw-ob';
 	}
 	}
 })
@@ -40,7 +40,7 @@ var vm = new Vue({
 		sharedDictionaryData,
 		dictionaryNeedsSaving: false,
 		requestInProgress: false,
-		servicesAddress: '/data/Services.php'
+		servicesAddress: settings.servicesAddress()
 	},
 	methods: {
 		loadDictionaryData: function() {
@@ -95,7 +95,7 @@ var vm = new Vue({
 				}
 			}
 		},
-		saveWord: function(orgItem, changedItem) {
+		saveWord: function(orgItem, changedItem, addAnother) {
 			changedItem = changedItem.toLowerCase();
 			if(orgItem.length == 0) {
 				this.sharedDictionaryData.items.push(changedItem);
@@ -124,8 +124,11 @@ var vm = new Vue({
 				this.sharedDictionaryData.items.splice(this.sharedDictionaryData.items.length-1, 1);
 				// end hack
 				
-				$('#wordModal').modal('toggle');
 				this.$emit('clearEdit', true);
+				if(addAnother)
+					this.$root.$emit('editWord', {header: "New word", item: ''});
+				else
+					$('#wordModal').modal('toggle');
 			}
 		}
 	},
@@ -136,8 +139,8 @@ var vm = new Vue({
 		this.$root.$on('deleteWord', function(item){
 			this.deleteWord(item);
 		}); 
-		this.$root.$on('saveWord', function(orgItem, changedItem){
-			this.saveWord(orgItem, changedItem);
+		this.$root.$on('saveWord', function(orgItem, changedItem, addAnother){
+			this.saveWord(orgItem, changedItem, addAnother);
 		}); 
 	}
 }).$mount('#app')

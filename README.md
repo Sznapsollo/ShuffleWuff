@@ -35,5 +35,9 @@ However if it was used by few "lessons" at the same time and each of the lessons
 
 ShuffleWuff displays these "play" icons next to each word/phrase. These are links to Google Translator reading API. Unfortunately this API is not official and Google actually blocks it when you run it from any website. So when you click on such icon you will get new tab but most probably it will display "404" error. But fear not! ;-) ... you can actually still hear the work you just have to hit refresh button and if this still does not help (in some cases it works) you just need to focus on tab url and hit enter to sort of introduce url to the tab - then it will definitely work. Perhaps some day I will make it work but so far I did not find working solution and I have not much motivation to do so really...I do not use this option often - it is just feature.
 
+In case you cannot add words - when you add word and click save, the dictionary resets itself - it is probably the case where your webserver has insufficient access rights to dictionary file folder. Change "dictionary" folder permission flags to 755 and that would solve it.
+
+If you want to change paths to translator or services files - you can change them in **<a href="https://github.com/Sznapsollo/ShuffleWuff/blob/master/settings.js" target="_blank">"settings.js"</a>** file.
+
 Take care! 
 Wanna touch base? office@webproject.waw.pl
