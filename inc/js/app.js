@@ -2,13 +2,21 @@ Vue.use(VueRouter)
 
 Vue.mixin({
 	methods: {
-	prepareTranslatorLink: function(item) {
-		return settings.translatorAddress()+encodeURI(item.replace(/\_/g, ' '))+'&tl=en&client=tw-ob';
-	}
+		prepareTranslatorVoiceLink: function(item) {
+			return settings.translatorVoiceAddress+encodeURI(item.replace(/\_/g, ' '))+'&tl=en&client=tw-ob';
+		},
+		prepareTranslatorLink: function(item, from, to) {
+			return settings.translatorAddress+from+'/'+to+'/'+encodeURI(item.replace(/\_/g, ' '));
+		}
 	}
 })
 
-// temporary
+const languagesDropdowns = {
+	languagesFrom: [],
+	languagesTo: [],
+	defaultTranslateFrom: "",
+	defaultTranslateTo: ""
+}
 
 const sharedDictionaryData = {
 	items: [],
@@ -38,9 +46,10 @@ var vm = new Vue({
 	router,
 	data: {
 		sharedDictionaryData,
+		languagesDropdowns,
 		dictionaryNeedsSaving: false,
 		requestInProgress: false,
-		servicesAddress: settings.servicesAddress()
+		servicesAddress: settings.servicesAddress
 	},
 	methods: {
 		loadDictionaryData: function() {
@@ -50,6 +59,19 @@ var vm = new Vue({
 			  receive: true
 			}).then(response => {
 				this.sharedDictionaryData.items = response.body.items;
+				this.languagesDropdowns.languagesFrom = settings.translateFrom;
+				this.languagesDropdowns.languagesTo = settings.translateTo;
+
+				if(settings.defaultLanguageFrom && settings.defaultTranslateFrom.length > 0)
+					this.languagesDropdowns.defaultTranslateFrom = settings.defaultTranslateFrom;
+				else if(this.languagesDropdowns.languagesFrom.length > 0)
+					this.languagesDropdowns.defaultTranslateFrom = this.languagesDropdowns.languagesFrom[0];
+
+				if(settings.defaultTranslateTo && settings.defaultTranslateTo.length > 0)
+					this.languagesDropdowns.defaultTranslateTo = settings.defaultTranslateTo;
+				else if(this.languagesDropdowns.languagesTo.length > 0)
+					this.languagesDropdowns.defaultTranslateTo = this.languagesDropdowns.languagesTo[0];
+
 				this.sharedDictionaryData.loaded = true;
 				this.requestInProgress = false;
 				this.$emit('dataLoaded', true);
@@ -148,3 +170,4 @@ var vm = new Vue({
 
 
 
+	

@@ -49,6 +49,20 @@ a {
 	display: inline-block;
 }
 
+#dictionaryList select.btn-mini,
+#shuffleBox select.btn-mini {
+	height: auto;
+}
+
+/* this is optional (see below) */
+#dictionaryList select.btn,
+#shuffleBox select.btn {
+	-webkit-appearance: button;
+	   -moz-appearance: button;
+			appearance: button;
+	padding-right: 16px;
+}
+
 .goodScores {
 	color: green;
 }

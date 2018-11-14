@@ -4,7 +4,7 @@
 
 ShuffleWuff is language learning Tool for kids. I build to do fun and efficient English lessons with my son. 
 
-It is Vue.js single page app, easily deployable requires just any web server. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect.
+It is Vue.js single page app, easily deployable requires just any web server with php support. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect.
 
 ## Demo
 **<a href="http://cultrides.com/test/Github/ShuffleWuff" target="_blank">Click here to see Demo</a>** - of course adding new words and deleting existing dictionary items will not work in demo since its data file is shared for everyone. Demo contains example data which is also present in this repository under "dictionary/data.txt". It cannot be changed in demo but you would be able to change it if you hosted ShuffleWuff yourself and your server would have access to "dictionary/data.txt" file.
@@ -37,7 +37,7 @@ ShuffleWuff displays these "play" icons next to each word/phrase. These are link
 
 In case you cannot add words - when you add word and click save, the dictionary resets itself - it is probably the case where your webserver has insufficient access rights to dictionary file folder. Change "dictionary" folder permission flags to 755 and that would solve it.
 
-If you want to change paths to translator or services files - you can change them in **<a href="https://github.com/Sznapsollo/ShuffleWuff/blob/master/settings.js" target="_blank">"settings.js"</a>** file.
+If you want to change paths to translator, services files, change from/to translate dropdown values or define default translate dropdown values - you can change all that in **<a href="https://github.com/Sznapsollo/ShuffleWuff/blob/master/settings.js" target="_blank">"settings.js"</a>** file.
 
 Take care! 
 Wanna touch base? office@webproject.waw.pl

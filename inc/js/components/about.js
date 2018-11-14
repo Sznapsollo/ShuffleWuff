@@ -3,7 +3,7 @@ const About = {
 			<div style="padding: 15px">
 ShuffleWuff is language learning Tool for kids. I build to do fun and efficient English lessons with my son. 
 
-It is Vue.js single page app, easily deployable requires just any web server. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect.
+It is Vue.js single page app, easily deployable requires just any web server with php support. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect.
 
 Solution is present on GitHub <a href="https://github.com/Sznapsollo/ShuffleWuff" target="_blank">here</a>.
 
@@ -35,7 +35,7 @@ ShuffleWuff displays these "play" icons next to each word/phrase. These are link
 <p/>
 In case you cannot add words - when you add word and click save, the dictionary resets itself - it is probably the case where your webserver has insufficient access rights to dictionary file folder. Change "dictionary" folder permission flags to 755 and that would solve it.
 <p/>
-If you want to change paths to translator or services files - you can change them in <a href="settings.js" target="_blank">"settings.js"</a> file.
+If you want to change paths to translator, services files, change from/to translate dropdown values or define default translate dropdown values - you can change all that in <a href="settings.js" target="_blank">"settings.js"</a> file.
 <p/>
 Take care! 
 Wanna touch base? <a href="mailto:office@webproject.waw.pl">office@webproject.waw.pl</a>

@@ -4,7 +4,14 @@ const Shuffle = {
 				<div class="container result">
 					<div v-if="sharedDictionaryData.loaded">
 						<h1 id="shuffledWord" >&nbsp;</h1>
-						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="prepareTranslatorLink(word)"><i class="fa fa-2x fa-play-circle-o"></i></a>
+						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="prepareTranslatorVoiceLink(word)"><i class="fa fa-2x fa-play-circle-o"></i></a>
+						<div>
+							<a target="_blank" v-bind:href="prepareTranslatorLink(word, languageFrom, languageTo)">translate</a> 
+							&nbsp;
+							<select class="btn btn-mini" v-model="languageFrom"><option v-for="option in languagesDropdowns.languagesFrom" v-bind:value="option">{{option}}</option></select>
+							&nbsp;-&nbsp;
+							<select class="btn btn-mini" v-model="languageTo"><option v-for="option in languagesDropdowns.languagesTo" v-bind:value="option">{{option}}</option></select>
+						</div>
 					</div>
 					<i v-if="!sharedDictionaryData.loaded" class="fa fa-cog fa-2x fa-spin"></i>
 				</div>
@@ -36,7 +43,10 @@ const Shuffle = {
 				sharedDictionaryData,
 				score,
 				correctAnswerStyles: ["spinRightEffect","spinLeftEffect"],
-				incorrectAnswerStyles: ["shakeEffect"]
+				incorrectAnswerStyles: ["shakeEffect"],
+				languagesDropdowns,
+				languageFrom: "",
+				languageTo: ""
 			}
 		},
 		methods: {
@@ -66,6 +76,10 @@ const Shuffle = {
 						currObject.shuffleWord();
 					}
 				}, 1000)
+			},
+			fillLanguagesDropdowns: function() {
+				this.languageFrom = this.languagesDropdowns.defaultTranslateFrom;
+				this.languageTo = this.languagesDropdowns.defaultTranslateTo;
 			},
 			randomEffect: function(items) {
 				return items[Math.floor(Math.random()*items.length)];
@@ -101,12 +115,14 @@ const Shuffle = {
 		created: function() {
 			if(this.sharedDictionaryData.items && this.sharedDictionaryData.items.length > 0) {
 				this.shuffleWord();
+				this.fillLanguagesDropdowns();
 			}
 		},
 		mounted: function() {
 			var currentObj = this;
 			this.$root.$on('dataLoaded', function(){
 				currentObj.shuffleWord();
+				currentObj.fillLanguagesDropdowns();
 			}) 
 		}
 	}
