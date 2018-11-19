@@ -1,13 +1,16 @@
+_ as _
 _ is _
 _ of _
 after
 all
 almost
+always
 and
 angry
 answer
 answer the question
 any
+anything
 arrow
 ask
 aunt
@@ -45,6 +48,7 @@ cables
 cake
 check
 child
+children
 circle
 classroom
 claws
@@ -55,6 +59,7 @@ cloud
 cold
 connect
 cookie
+dangerous
 dark
 daughter
 day
@@ -73,10 +78,13 @@ door
 down
 draw
 drawing
+dream
 drink
+drive
 ear
 ears
 easy
+electicity
 empty
 engine
 every
@@ -96,6 +104,7 @@ find
 finger
 finish
 fire
+first
 floor
 flower
 for
@@ -103,6 +112,7 @@ forehead
 fork
 four
 friday
+fridge
 from
 full
 funny
@@ -130,6 +140,7 @@ he is
 heavy
 here
 high
+hit
 hold
 hole
 homework
@@ -185,6 +196,7 @@ little
 living room
 lollipop
 long
+loud
 love
 low
 magnet
@@ -204,8 +216,10 @@ mouse
 moustache
 much
 much more
+musician
 my favourite _ is _
 need
+never
 next
 next to
 nice
@@ -251,6 +265,7 @@ pocket
 previous
 pull
 pull ups
+punch
 push
 push ups
 put
@@ -261,9 +276,9 @@ really
 rectangle
 red
 remember
-remembr
 repeat
 right
+rock
 room
 round
 rule
@@ -274,12 +289,15 @@ sand
 sandwich
 saturday
 say
+second
 seldom
 she is
 shirt
 shoes
+shoot
 short
 show
+silent
 sing
 sister
 sit
@@ -293,6 +311,7 @@ small
 smaller
 smart
 snow
+so
 soft
 some
 something
@@ -300,9 +319,11 @@ somewhere
 son
 spicy
 spoon
+square
 stand
 stone
 storm
+strawberry
 strong
 sugar
 sun
@@ -325,6 +346,7 @@ they are
 thig
 thing
 think
+third
 this
 throw
 thunder
@@ -351,6 +373,7 @@ under
 up
 very
 wake up
+wall
 wallet
 want
 warm
@@ -380,9 +403,13 @@ who
 why
 window
 with
+without
 woman
+word
 work
+world
 would like
+write
 year
 yesterday
 you are
