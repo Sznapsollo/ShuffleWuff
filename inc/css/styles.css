@@ -137,3 +137,7 @@ a {
 	opacity: 0;
 	transition: visibility 0s 0.4s, opacity 0.4s linear;
 }
+
+.navbar-light .navbar-nav .active {
+	font-weight: 700;
+}
