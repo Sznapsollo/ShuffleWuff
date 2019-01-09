@@ -6,6 +6,8 @@ const Shuffle = {
 						<h1 id="shuffledWord" >&nbsp;</h1>
 						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="prepareTranslatorVoiceLink(word)"><i class="fa fa-2x fa-play-circle-o"></i></a>
 						<div>
+							<a target="_blank" href="#" v-on:click="editWord(word)" data-toggle="modal" data-target="#wordModal">edit</a> 
+							&nbsp;
 							<a target="_blank" v-bind:href="prepareTranslatorLink(word, languageFrom, languageTo)">translate</a> 
 							&nbsp;
 							<select class="btn btn-mini" v-model="languageFrom"><option v-for="option in languagesDropdowns.languagesFrom" v-bind:value="option">{{option}}</option></select>
@@ -77,6 +79,9 @@ const Shuffle = {
 					}
 				}, 1000)
 			},
+			editWord: function(item) {
+				this.$root.$emit('editWord', {header: "Edit word", item: item});
+			},
 			fillLanguagesDropdowns: function() {
 				this.languageFrom = this.languagesDropdowns.defaultTranslateFrom;
 				this.languageTo = this.languagesDropdowns.defaultTranslateTo;
@@ -89,6 +94,9 @@ const Shuffle = {
 				this.word = sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
 				this.score.displayed++;
 
+				this.shuffleLetters(this);
+			},
+			shuffleLetters: function(currObj, word) {
 				setTimeout(function () {
 					var container = $("#shuffledWord");
 					container.shuffleLetters({
@@ -123,6 +131,12 @@ const Shuffle = {
 			this.$root.$on('dataLoaded', function(){
 				currentObj.shuffleWord();
 				currentObj.fillLanguagesDropdowns();
-			}) 
+			});
+			this.$root.$on('saveWord', function(orgItem, changedItem, addAnother){
+				if(currentObj.word == orgItem) {
+					currentObj.word = changedItem;
+					currentObj.shuffleLetters(currentObj);
+				}
+			});	
 		}
 	}

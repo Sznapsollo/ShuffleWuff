@@ -17,9 +17,9 @@ Vue.component('dictionary-list-item', {
 				</div>
 				<div>
 					<ul class="list-inline">
-						<li class="list-inline-item"><a href="#" v-on:click="editWord(item)" data-toggle="modal" data-target="#wordModal">Edit word</a></li>
+						<li class="list-inline-item"><a href="#" v-on:click="editWord(item)" data-toggle="modal" data-target="#wordModal">edit</a></li>
 						<li class="list-inline-item">
-							<a v-if="shouldDelete == 0" v-on:click="shouldDelete=1" class="text-danger">Delete word</a>
+							<a v-if="shouldDelete == 0" v-on:click="shouldDelete=1" class="text-danger">delete</a>
 							<a v-if="shouldDelete == 1" v-on:click="shouldDelete=2" class="text-danger">Are you sure?</a>
 							<a v-if="shouldDelete == 2" v-on:click="deleteWord(item)" class="text-danger">Ok. Click to delete</a>
 						</li>
