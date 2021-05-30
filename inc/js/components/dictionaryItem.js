@@ -1,4 +1,4 @@
-Vue.component('dictionary-list-item', {
+app.component('dictionary-list-item', {
 	props: ['index', 'item', 'searchPhrase'],
 	template: `
 		<li class="list-group-item">
@@ -51,12 +51,12 @@ Vue.component('dictionary-list-item', {
 			this.languageTo = this.languagesDropdowns.defaultTranslateTo;
 		},
 		deleteWord: function(item) {
-			this.$root.$emit('deleteWord', item);
+			window.mittEmitter.emit('deleteWord', item);
 			this.shouldDelete = 0;
 			$("#item-"+this.index).collapse('toggle');
 		},
 		editWord: function(item) {
-			this.$root.$emit('editWord', {header: "Edit word", item: item});
+			window.mittEmitter.emit('editWord', {header: "Edit word", item: item});
 		}
 	},
 	created: function() {

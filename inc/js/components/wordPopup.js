@@ -1,13 +1,4 @@
-Vue.component('word-popup', {
-	data: function() {
-		return {
-			sharedDictionaryData,
-			initialText: '',
-			itemText: '',
-			header: '',
-			errorMessage: '',
-		}
-	},
+app.component('word-popup', {
 	template: `
 		<div id="wordModal" class="modal fade" tabindex="-1" role="dialog" data-backdrop="static">
 			<div class="modal-dialog" role="document">
@@ -21,8 +12,8 @@ Vue.component('word-popup', {
 					<div class="modal-body">
 						<div class="form-group">
 							<p>
-								<form autocomplete="off" onsubmit="return;">
-									<input id="wordPopupTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText' style="-webkit-user-modify: read-write-plaintext-only;" @keyup.enter="enterClicked" placeholder="Your word here">
+								<form autocomplete="off" v-on:submit.prevent="onSubmit" onsubmit="return;">
+									<input id="wordPopupTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText' style="-webkit-user-modify: read-write-plaintext-only;" placeholder="Your word here">
 								</form>
 							</p>
 						</div>
@@ -37,62 +28,80 @@ Vue.component('word-popup', {
 			</div>
 		</div>
 	`,
-	methods: {
-		saveWord: function(addAnother) {
-			return this.$root.$emit('saveWord', this.initialText, this.itemText, addAnother);
-		},
-		canSave: function() {
-			return this.errorMessage.length == 0;
-		},
-		clearForm: function() {
-			this.initialText = '';
-			this.itemText = '';
-			this.header = ''
-			console.log('cleared');
-		},
-		enterClicked(){
-			if(this.canSave() && !this.sameAsInitial())
-				this.saveWord();
-		},
-		sameAsInitial: function() {
-			return this.itemText.toLowerCase() === this.initialText.toLowerCase();
+	setup() {
+		const initialText = Vue.ref('')
+		const itemText = Vue.ref('')
+		const header = Vue.ref('')
+		const errorMessage = Vue.ref('')
+
+		const saveWord = function(addAnother) {
+			return window.mittEmitter.emit('saveWord', {orgItem: initialText.value, changedItem: itemText.value, addAnother: addAnother});
 		}
-	},
-	watch: {
-		itemText: function(val) {
-			var currentObj = this;
-			if(val.length == 0) {
-				this.errorMessage = "Name cannot be empty";
+		
+		const canSave = function() {
+			return errorMessage.value.length == 0;
+		}
+
+		const clearForm = function() {
+			initialText.value = '';
+			itemText.value = '';
+			header.value = ''
+			console.log('cleared');
+		}
+
+		const sameAsInitial = function() {
+			return itemText.value.toLowerCase() === initialText.value.toLowerCase();
+		}
+
+		const onSubmit = function() {
+			if(canSave() && !sameAsInitial()) {
+				saveWord(true);
+			}
+		}
+
+		Vue.watch(itemText, (itemTextValue, oldItemTextValue) => {
+			if(itemTextValue.length == 0) {
+				errorMessage.value = "Name cannot be empty";
 				return;
 			}
-			
-			else if(!this.sameAsInitial()){
+			else if(!sameAsInitial()){
 				
 				var results = sharedDictionaryData.items.filter(function(element, index, array) {
-					return (element.toLowerCase() === val.toLowerCase());
+					return (element.toLowerCase() === itemTextValue.toLowerCase());
 				});
-				
 				if(results.length > 0) {
-					this.errorMessage = "Item already exists";
+					errorMessage.value = "Item already exists";
 					return;
 				}
 				
 			}
 			
-			this.errorMessage = "";
-		}
-	},
-	mounted: function() {
-		var currentObj = this;
-		this.$root.$on('editWord', function(popupInfo){
-			currentObj.initialText = popupInfo.item;
-			currentObj.itemText = popupInfo.item;
-			currentObj.header = popupInfo.header
-			
-			setTimeout(function(){$('#wordPopupTextBox').focus();},400);
-		});
-		this.$root.$on('clearEdit', function(){
-			currentObj.clearForm();
+			errorMessage.value = "";
 		})
+
+		Vue.onMounted(function() {
+			window.mittEmitter.on('editWord', function(popupInfo){
+				initialText.value = popupInfo.item;
+				itemText.value = popupInfo.item;
+				header.value = popupInfo.header
+				
+				setTimeout(function(){$('#wordPopupTextBox').focus();},400);
+			});
+			window.mittEmitter.on('clearEdit', function(){
+				clearForm();
+			})
+		})
+
+		return {
+			canSave,
+			clearForm,
+			onSubmit,
+			initialText,
+			itemText,
+			header,
+			errorMessage,
+			sameAsInitial,
+			saveWord
+		}
 	}
 })
