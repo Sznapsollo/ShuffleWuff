@@ -5,15 +5,15 @@ const Shuffle = {
 				<div class="container result">
 					<div v-if="isLoaded">
 						<h1 id="shuffledWord" >&nbsp;</h1>
-						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="prepareTranslatorVoiceLink(word)"><i class="fa fa-2x fa-play-circle-o"></i></a>
+						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="prepareTranslatorVoiceLink(word, languageFrom)"><i class="fa fa-2x fa-play-circle-o"></i></a>
 						<div>
-							<a target="_blank" href="#" v-on:click="editWord(word)" data-toggle="modal" data-target="#wordModal">edit</a> 
+							<a target="_blank" href="#" v-on:click="editWord()" data-toggle="modal" data-target="#wordModal">edit</a> 
 							&nbsp;
 							<a target="_blank" v-bind:href="prepareTranslatorLink(word, languageFrom, languageTo)">translate</a> 
 							&nbsp;
-							<select class="btn btn-mini" v-model="languageFrom"><option v-for="option in languagesDropdownsLocal.languagesFrom" v-bind:value="option">{{option}}</option></select>
-							&nbsp;-&nbsp;
-							<select class="btn btn-mini" v-model="languageTo"><option v-for="option in languagesDropdownsLocal.languagesTo" v-bind:value="option">{{option}}</option></select>
+							<select style="width: 80px" class="btn btn-mini" v-model="languageFrom"><option v-for="option in languages" v-bind:value="option">{{option}}</option></select>
+							&nbsp;<a href="#" v-on:click="flipToFrom()">flip</a>&nbsp;
+							<select style="width: 80px" class="btn btn-mini" v-model="languageTo"><option v-for="option in languages" v-bind:value="option">{{option}}</option></select>
 						</div>
 					</div>
 					<i v-if="!isLoaded" class="fa fa-cog fa-2x fa-spin"></i>
@@ -36,7 +36,12 @@ const Shuffle = {
 				<div class="container">
 					<input type="checkbox" name="automatic_shuffle" id="automatic_shuffle_chbx" v-model="automaticShuffle">
 					&nbsp;
-					<label style="cursor: pointer" for="automatic_shuffle_chbx">Shuffle automatically after score</label>
+					<label style="cursor: pointer" for="automatic_shuffle_chbx">shuffle automatically after score</label>
+				</div>
+				<div class="container">
+					<input type="checkbox" name="showTranslated" id="showTranslated" v-model="showTranslated">
+					&nbsp;
+					<label style="cursor: pointer" for="showTranslated">show translated</label>
 				</div>
 			</div>`,
 		setup(props, context) {
@@ -46,15 +51,35 @@ const Shuffle = {
 			const goodPoints = Vue.ref(10)
 			const incorrectAnswerStyles = ["shakeEffect"]
 			const isLoaded = Vue.ref(false)
-			const languagesDropdownsLocal = Vue.ref(languagesDropdowns)
+			const languages = Vue.ref([])
 			const languageFrom = Vue.ref("")
 			const languageTo = Vue.ref("")
 			const minusPoints = Vue.ref(5)
 			const processing = Vue.ref(false)
 			const scoreLocal = Vue.ref(score)
 			const word = Vue.ref("")
+			const showTranslated = Vue.ref(false)
+			let shuffledItem = {}
+
 			const randomEffect = function(items) {
 				return items[Math.floor(Math.random()*items.length)];
+			}
+			let propName = "languageFrom"
+			let propNameTranslated = "languageTo"
+
+			const flipToFrom = function() {
+				let temp = languageTo.value;
+				languageTo.value = languageFrom.value
+				languageFrom.value = temp
+				if(propName == 'languageFrom') {
+					propName = 'languageTo'
+					propNameTranslated = 'languageFrom'
+				} else {
+					propName = 'languageFrom'
+					propNameTranslated = 'languageTo'
+				}
+				word.value = shuffledItem[propName] ? shuffledItem[propName] : '---'
+				shuffleLetters();
 			}
 
 			const calculateScore = function(isCorrect) {
@@ -85,26 +110,33 @@ const Shuffle = {
 				}, 1000)
 			}
 			
-			const editWord = function(item) {
-				window.mittEmitter.emit('editWord', {header: "Edit word", item: item});
+			const editWord = function() {
+				window.mittEmitter.emit('editWord', {header: "Edit word", item: shuffledItem});
 			}
 			
 			const fillLanguagesDropdowns = function() {
-				languageFrom.value = languagesDropdownsLocal.value.defaultTranslateFrom;
-				languageTo.value = languagesDropdownsLocal.value.defaultTranslateTo;
+				languages.value = languagesDropdowns.languages
+				languageFrom.value = languagesDropdowns.languageForeign;
+				languageTo.value = languagesDropdowns.languageOrigin;
 			}
 			
 			const shuffleLetters = function() {
 				setTimeout(function () {
 					var container = $("#shuffledWord");
+					var textToBeShuffled = word.value
+					if(showTranslated.value) {
+						textToBeShuffled = textToBeShuffled + ' (' + (shuffledItem[propNameTranslated] ? shuffledItem[propNameTranslated] : '---') + ')'
+					}
 					container.shuffleLetters({
-						"text": word.value
+						"text": textToBeShuffled
 					});
 				});
 			}
 
 			const shuffleWord = function () {
-				word.value = sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
+				let shuffledWord= sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
+				shuffledItem = shuffledWord
+				word.value = shuffledItem[propName] ? shuffledItem[propName] : '---'
 				scoreLocal.value.displayed++;
 
 				shuffleLetters();
@@ -125,6 +157,10 @@ const Shuffle = {
 				}, 500)
 			}
 
+			Vue.watch(showTranslated, (showTranslatedValue, oldShowTranslatedValue) => {
+				shuffleLetters()
+			})
+
 			Vue.onMounted(function() {
 				console.log('shuffle mounted')
 	
@@ -140,10 +176,10 @@ const Shuffle = {
 					shuffleWord();
 					fillLanguagesDropdowns();
 				});
-				window.mittEmitter.on('saveWord', function(orgItem, changedItem, addAnother){
-					if(word == orgItem) {
-						word = changedItem;
-						shuffleLetters(currentObj);
+				window.mittEmitter.on('savedWord', function(changedItem){
+					if(shuffledItem == changedItem) {
+						word.value = shuffledItem[propName]
+						shuffleLetters();
 					}
 				});	
 			})
@@ -156,18 +192,20 @@ const Shuffle = {
 				cleanScore,
 				editWord,
 				fillLanguagesDropdowns,
+				flipToFrom,
 				goodPoints,
 				isLoaded,
-				languagesDropdownsLocal,
+				languages,
 				languageFrom,
 				languageTo,
 				minusPoints,
 				processing,
 				randomEffect,
 				scoreLocal,
+				showTranslated,
 				shuffleLetters,
 				shuffleWord,
-				word
+				word,
 			}
 		}
 	}

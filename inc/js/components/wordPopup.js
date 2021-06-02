@@ -12,12 +12,15 @@ app.component('word-popup', {
 					<div class="modal-body">
 						<div class="form-group">
 							<p>
-								<form autocomplete="off" v-on:submit.prevent="onSubmit" onsubmit="return;">
-									<input id="wordPopupTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSave()}" class="form-control" v-model='itemText' style="-webkit-user-modify: read-write-plaintext-only;" placeholder="Your word here">
+								<form autocomplete="off" >
+									<input id="wordPopupForeignTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSaveField('wordPopupForeignTextBox')}" class="form-control" v-model='languageFromText' style="-webkit-user-modify: read-write-plaintext-only;" placeholder="Your foreign word here">
+									<br/>
+									<input id="wordPopupOriginTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSaveField('wordPopupOriginTextBox')}" class="form-control" v-model='languageToText' style="-webkit-user-modify: read-write-plaintext-only;" placeholder="Your origin word here">
+									<button style="display: none" type="submit" @click="onSubmit"></button>
 								</form>
 							</p>
 						</div>
-						{{errorMessage}}
+						{{errorMessageText}}
 					</div>
 					<div class="modal-footer">
 						<button type="button" :disabled="!canSave() || sameAsInitial()" v-on:click="saveWord(false)" class="btn btn-primary">Save changes</button>
@@ -29,63 +32,98 @@ app.component('word-popup', {
 		</div>
 	`,
 	setup() {
-		const initialText = Vue.ref('')
-		const itemText = Vue.ref('')
+		let item = {}
+		const languageFromText = Vue.ref('')
+		const languageToText = Vue.ref('')
 		const header = Vue.ref('')
-		const errorMessage = Vue.ref('')
+		let errorMessage = null
+		const errorMessageText = Vue.ref('')
 
 		const saveWord = function(addAnother) {
-			return window.mittEmitter.emit('saveWord', {orgItem: initialText.value, changedItem: itemText.value, addAnother: addAnother});
+			item = item ? item : {}
+			item.languageFrom = languageFromText.value
+			item.languageTo = languageToText.value
+			return window.mittEmitter.emit('saveWord', {changedItem: item, addAnother: addAnother});
 		}
-		
-		const canSave = function() {
-			return errorMessage.value.length == 0;
+
+		const canSaveField = function(fieldId) {
+			if(errorMessage && errorMessage[fieldId]) {
+				return false
+			}
+			return true
+		}
+
+		const canSave = function(fieldId) {
+			return errorMessage == null
 		}
 
 		const clearForm = function() {
-			initialText.value = '';
-			itemText.value = '';
+			item = {};
+			languageFromText.value = ''
+			languageToText.value = ''
 			header.value = ''
 			console.log('cleared');
 		}
 
 		const sameAsInitial = function() {
-			return itemText.value.toLowerCase() === initialText.value.toLowerCase();
+			if(!item) {
+				return false
+			}
+			item.languageFrom = item.languageFrom && item.languageFrom.toLowerCase ? item.languageFrom : ''
+			item.languageTo = item.languageTo && item.languageTo.toLowerCase ? item.languageTo : ''
+			return item.languageFrom.toLowerCase() === languageFromText.value.toLowerCase() && item.languageTo.toLowerCase() === languageToText.value.toLowerCase();
 		}
 
-		const onSubmit = function() {
+		const onSubmit = function(e) {
+			debugger
+			e.preventDefault();
 			if(canSave() && !sameAsInitial()) {
 				saveWord(true);
 			}
 		}
 
-		Vue.watch(itemText, (itemTextValue, oldItemTextValue) => {
-			if(itemTextValue.length == 0) {
-				errorMessage.value = "Name cannot be empty";
+		const validateEditorValues = function() {
+			if(!languageFromText.value || languageFromText.value.length == 0) {
+				errorMessage = {wordPopupForeignTextBox:"Field From cannot be empty"};
+				errorMessageText.value = "Field From cannot be empty"
+				return;
+			} else if(!languageToText.value || languageToText.value.length == 0) {
+				errorMessage = {wordPopupOriginTextBox: "Field To cannot be empty"};
+				errorMessageText.value = "Field To cannot be empty"
 				return;
 			}
 			else if(!sameAsInitial()){
-				
 				var results = sharedDictionaryData.items.filter(function(element, index, array) {
-					return (element.toLowerCase() === itemTextValue.toLowerCase());
+					return (item != element) && (element.languageFrom.toLowerCase() === languageFromText.value.toLowerCase());
 				});
 				if(results.length > 0) {
-					errorMessage.value = "Item already exists";
+					errorMessage = {wordPopupForeignTextBox: "Item already exists"};
+					errorMessageText.value = "Item already exists"
 					return;
 				}
 				
 			}
 			
-			errorMessage.value = "";
+			errorMessage = null;
+			errorMessageText.value = null
+		}
+
+		Vue.watch(languageFromText, (languageFromTextValue, oldLnguageFromTextValue) => {
+			validateEditorValues()
+		})
+
+		Vue.watch(languageToText, (languageToTextValue, oldLnguageToTextValue) => {
+			validateEditorValues()
 		})
 
 		Vue.onMounted(function() {
 			window.mittEmitter.on('editWord', function(popupInfo){
-				initialText.value = popupInfo.item;
-				itemText.value = popupInfo.item;
+				item = popupInfo.item;
+				languageFromText.value = item ? item.languageFrom : ''
+				languageToText.value = item ? item.languageTo : ''
 				header.value = popupInfo.header
 				
-				setTimeout(function(){$('#wordPopupTextBox').focus();},400);
+				setTimeout(function(){$('#wordPopupForeignTextBox').focus();},400);
 			});
 			window.mittEmitter.on('clearEdit', function(){
 				clearForm();
@@ -94,14 +132,16 @@ app.component('word-popup', {
 
 		return {
 			canSave,
+			canSaveField,
 			clearForm,
 			onSubmit,
-			initialText,
-			itemText,
+			languageFromText,
+			languageToText,
 			header,
-			errorMessage,
+			errorMessageText,
 			sameAsInitial,
-			saveWord
+			saveWord,
+			validateEditorValues
 		}
 	}
 })

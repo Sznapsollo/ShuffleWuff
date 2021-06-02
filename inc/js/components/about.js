@@ -21,7 +21,7 @@ This is how I do it. Perhaps you will also find it suit the way you teach your k
 <p/>
 <h3>Where is data stored</h3>
 
-Data is stored in plain text file. The file is located in <a href="dictionary/data.txt" target="_blank">"dictionary/data.txt"</a> path. Each line is new word. This GitHub repository contains example file with example data - you can just delete all of it and introduce your content- through ShuffleWuff UI or just by directly changing this file content.
+Data is stored in plain text file. The file is located in <a href="dictionary/data.csv" target="_blank">"dictionary/data.csv"</a> path. Each line is new word. This GitHub repository contains example file with example data - you can just delete all of it and introduce your content- through ShuffleWuff UI or just by directly changing this file content.
 
 What is worth mentioning is that single text file as datasource is extremely convenient for single uses because it does not require any setup for databases etc.
 

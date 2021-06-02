@@ -7,7 +7,7 @@ ShuffleWuff is language learning Tool for kids. I build to do fun and efficient 
 It is Vue.js single page app, easily deployable requires just any web server with php support. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect.
 
 ## Demo
-**<a href="http://cultrides.com/test/Github/ShuffleWuff" target="_blank">Click here to see Demo</a>** - of course adding new words and deleting existing dictionary items will not work in demo since its data file is shared for everyone. Demo contains example data which is also present in this repository under "dictionary/data.txt". It cannot be changed in demo but you would be able to change it if you hosted ShuffleWuff yourself and your server would have access to "dictionary/data.txt" file.
+**<a href="http://cultrides.com/test/Github/ShuffleWuff" target="_blank">Click here to see Demo</a>** - of course adding new words and deleting existing dictionary items will not work in demo since its data file is shared for everyone. Demo contains example data which is also present in this repository under "dictionary/data.csv". It cannot be changed in demo but you would be able to change it if you hosted ShuffleWuff yourself and your server would have access to "dictionary/data.csv" file.
 
 ## How I use it
 
@@ -25,7 +25,7 @@ You need any webserver to host the site. I host it in my local home network on R
 
 ## Where is data stored
 
-Data is stored in plain text file. The file is located in **<a href="https://github.com/Sznapsollo/ShuffleWuff/blob/master/dictionary/data.txt" target="_blank">"dictionary/data.txt"</a>** path. Each line is new word. This GitHub repository contains example file with example data - you can just delete all of it and introduce your content- through ShuffleWuff UI or just by directly changing this file content.
+Data is stored in plain text file. The file is located in **<a href="https://github.com/Sznapsollo/ShuffleWuff/blob/master/dictionary/data.csv" target="_blank">"dictionary/data.csv"</a>** path. Each line is new word. This GitHub repository contains example file with example data - you can just delete all of it and introduce your content- through ShuffleWuff UI or just by directly changing this file content.
 
 What is worth mentioning is that single text file as datasource is extremely convenient for single uses because it does not require any setup for databases etc.
 

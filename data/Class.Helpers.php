@@ -2,7 +2,7 @@
 
 class Helpers
 {
-	public static $dictionaryfilepathname = '../dictionary/data.txt';
+	public static $dictionaryfilepathname = '../dictionary/data.csv';
 	public static function Utf8ize($d) {
 		if (is_array($d)) {
 			foreach ($d as $k => $v) {

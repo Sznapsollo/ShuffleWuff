@@ -1,5 +1,7 @@
 /* todo
 	- switch db to csv format
+	- save as csv
+	- add translation to existing items
 	- add changed date to existing items
 	- add sort option by changed date
 	- add translation to existing items
@@ -9,13 +11,13 @@
 	- tests generator : how many
 	- tests generator: fereign or translation
 	- tests generator: all/newest (by changed date)
+	- dictionary item
 */
 
 const languagesDropdowns = {
-	languagesFrom: [],
-	languagesTo: [],
-	defaultTranslateFrom: "",
-	defaultTranslateTo: ""
+	languages: [],
+	languageForeign: "",
+	languageOrigin: ""
 }
 
 const sharedDictionaryData = {
@@ -39,17 +41,17 @@ var app = Vue.createApp({
 		const servicesAddress = settings.servicesAddress
 
 		const addDictionaryData = function() {
-			window.mittEmitter.emit('editWord', {header: "New word", item: ''});
+			window.mittEmitter.emit('editWord', {header: "New word", item: null});
 			$('#wordModal').modal('toggle');
 		}
 
-		const deleteWord = function(item) {
-			item = item.toLowerCase();
+		const deleteWord = function(deleteItem) {
 			for(var deleteIndex = 0; deleteIndex < sharedDictionaryData.items.length; deleteIndex++) {
-				if(item === sharedDictionaryData.items[deleteIndex].toLowerCase()) {
+				if(deleteItem == sharedDictionaryData.items[deleteIndex].languageFrom) {
 					sharedDictionaryData.items.splice(deleteIndex, 1);
-					console.log('deleted ' + item);
+					console.log('deleted ' + deleteItem);
 					dictionaryNeedsSaving.value = true;
+					window.mittEmitter.emit('deletedWord', {});
 					break;
 				}
 			}
@@ -62,20 +64,10 @@ var app = Vue.createApp({
 			  receive: true
 			}).then(response => {
 				sharedDictionaryData.items = response.data.items;
-				languagesDropdowns.languagesFrom = settings.translateFrom;
-				languagesDropdowns.languagesTo = settings.translateTo;
+				languagesDropdowns.languages = [settings.languageForeign, settings.languageOrigin];
 
-				if(settings.defaultLanguageFrom && settings.defaultTranslateFrom.length > 0) {
-					languagesDropdowns.defaultTranslateFrom = settings.defaultTranslateFrom;
-				} else if(languagesDropdowns.languagesFrom.length > 0) {
-					languagesDropdowns.defaultTranslateFrom = languagesDropdowns.languagesFrom[0];
-				}
-
-				if(settings.defaultTranslateTo && settings.defaultTranslateTo.length > 0) {
-					languagesDropdowns.defaultTranslateTo = settings.defaultTranslateTo;
-				} else if(languagesDropdowns.languagesTo.length > 0) {
-					languagesDropdowns.defaultTranslateTo = languagesDropdowns.languagesTo[0];
-				}
+				languagesDropdowns.languageForeign = languagesDropdowns.languages[0];
+				languagesDropdowns.languageOrigin = languagesDropdowns.languages[1];
 
 				sharedDictionaryData.loaded = true;
 				requestInProgress.value = false;
@@ -109,40 +101,33 @@ var app = Vue.createApp({
 
 		const saveWord = function(args) {
 			if(!args) {args = {}}
-			let orgItem = args.orgItem
 			let changedItem = args.changedItem
 			let addAnother = args.addAnother
-			changedItem = changedItem.toLowerCase();
-			if(orgItem.length == 0) {
+
+			changedItem.languageFrom = changedItem.languageFrom.toLowerCase()
+			changedItem.languageTo = changedItem.languageTo.toLowerCase()
+			changedItem.changeDate = new Date()
+
+			let foundItem = sharedDictionaryData.items.find(function(item){return item == changedItem})
+
+			if(foundItem) {
+				dictionaryNeedsSaving.value = true;
+				$('#dictionaryList').find('.collapse.show').collapse('hide');
+				console.log('saved ' + changedItem.languageFrom);
+			} else {
 				sharedDictionaryData.items.push(changedItem);
 				dictionaryNeedsSaving.value = true;
-				
 				console.log('saved new ' + changedItem);
 			}
-			else {
-				orgItem = orgItem.toLowerCase();
-				for(var saveIndex = 0; saveIndex < sharedDictionaryData.items.length; saveIndex++) {
-					if(orgItem === sharedDictionaryData.items[saveIndex].toLowerCase()) {
-						sharedDictionaryData.items[saveIndex] = changedItem;
-						
-						dictionaryNeedsSaving.value = true;
-						
-						$('#dictionaryList').find('.collapse.show').collapse('hide');
-						console.log('saved ' + orgItem + ' to ' + changedItem);
-						break;
-					}
-				}
-			}
 			
+			sharedDictionaryData.items.sort(function(a,b) {return a.languageFrom > b.languageFrom})
+
+			window.mittEmitter.emit('savedWord', changedItem);
+
 			if(dictionaryNeedsSaving.value) {
-				// hack to refresh list - just add dummy record and then remove
-				sharedDictionaryData.items.push(" ");
-				sharedDictionaryData.items.splice(sharedDictionaryData.items.length-1, 1);
-				// end hack
-				
 				window.mittEmitter.emit('clearEdit', true);
 				if(addAnother)
-					window.mittEmitter.emit('editWord', {header: "New word", item: ''});
+					window.mittEmitter.emit('editWord', {header: "New word", item: null});
 				else
 					$('#wordModal').modal('toggle');
 			}
@@ -173,11 +158,11 @@ var app = Vue.createApp({
 
 app.mixin({
 	methods: {
-		prepareTranslatorVoiceLink: function(item) {
-			return settings.translatorVoiceAddress+encodeURI(item.replace(/\_/g, ' '))+'&tl=en&client=tw-ob';
+		prepareTranslatorVoiceLink: function(value, toLanguage) {
+			return settings.translatorVoiceAddress+encodeURI(value.replace(/\_/g, ' '))+'&tl=' + toLanguage + '&client=tw-ob';
 		},
-		prepareTranslatorLink: function(item, from, to) {
-			return settings.translatorAddress+from+'/'+to+'/'+encodeURI(item.replace(/\_/g, ' '));
+		prepareTranslatorLink: function(value, from, to) {
+			return settings.translatorAddress+from+'/'+to+'/'+encodeURI(value.replace(/\_/g, ' '));
 		}
 	}
 })
