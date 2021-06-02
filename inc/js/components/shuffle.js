@@ -7,13 +7,16 @@ const Shuffle = {
 						<h1 id="shuffledWord" >&nbsp;</h1>
 						<a style="display: inline; opacity: 0.5" target="_blank" v-bind:href="prepareTranslatorVoiceLink(word, languageFrom)"><i class="fa fa-2x fa-play-circle-o"></i></a>
 						<div>
+							<select style="width: 80px" class="btn btn-mini" v-model="languageFrom"><option v-for="option in languages" v-bind:value="option">{{option}}</option></select>
+							&nbsp;<a href="#" v-on:click="flipToFrom()">flip</a>&nbsp;
+							<select style="width: 80px" class="btn btn-mini" v-model="languageTo"><option v-for="option in languages" v-bind:value="option">{{option}}</option></select>
+						</div>
+						&nbsp;
+						<div>
 							<a target="_blank" href="#" v-on:click="editWord()" data-toggle="modal" data-target="#wordModal">edit</a> 
 							&nbsp;
 							<a target="_blank" v-bind:href="prepareTranslatorLink(word, languageFrom, languageTo)">translate</a> 
 							&nbsp;
-							<select style="width: 80px" class="btn btn-mini" v-model="languageFrom"><option v-for="option in languages" v-bind:value="option">{{option}}</option></select>
-							&nbsp;<a href="#" v-on:click="flipToFrom()">flip</a>&nbsp;
-							<select style="width: 80px" class="btn btn-mini" v-model="languageTo"><option v-for="option in languages" v-bind:value="option">{{option}}</option></select>
 						</div>
 					</div>
 					<i v-if="!isLoaded" class="fa fa-cog fa-2x fa-spin"></i>
@@ -166,7 +169,7 @@ const Shuffle = {
 	
 				isLoaded.value = sharedDictionaryData.loaded
 				
-				if(sharedDictionaryData.items && sharedDictionaryData.items.length > 0) {
+				if(!shuffledItem.languageFrom && sharedDictionaryData.items && sharedDictionaryData.items.length > 0) {
 					shuffleWord();
 					fillLanguagesDropdowns();
 				}

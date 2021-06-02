@@ -2,6 +2,10 @@
 <html
 
 <head>
+<!--
+	keep alive
+	links positions
+-->
 <meta http-equiv="Content-Language" content="pl">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -59,8 +63,15 @@
 				</ul>
 			</div>
 		</nav>
-		<router-view class="view"></router-view>
-		<!-- <shuffle/> -->
+		<keep-alive>
+			<router-view v-slot="{ Component }">
+				<transition>
+					<keep-alive>
+					<component :is="Component" />
+					</keep-alive>
+				</transition>
+			</router-view>
+		</keep-alive>
 		<word-popup></word-popup>
 	</div>
 	<script src="inc/js/app.js"></script>
