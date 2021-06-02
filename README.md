@@ -9,7 +9,7 @@ It is Vue.js single page app, easily deployable requires just any web server wit
 ## Demo
 **<a href="http://cultrides.com/test/Github/ShuffleWuff" target="_blank">Click here to see Demo</a>** - of course adding new words and deleting existing dictionary items will not work in demo since its data file is shared for everyone. Demo contains example data which is also present in this repository under "dictionary/data.csv". It cannot be changed in demo but you would be able to change it if you hosted ShuffleWuff yourself and your server would have access to "dictionary/data.csv" file.
 
-## How I use it
+## How I use it 
 
 So I have english lessons with my son. The way it works is that we have whiteboard and every lesson we use it to write down words that are new or require revisiting. After a couple of lessons table is full and at that point I write down the words - originally I was just putting them on some excel sheet but soon it turned out to be really boring and pointless - I ended up repeating same words and it was not that easy to look through them. So now I am putting new words and phrases into this tool - see "Add new word" navbar option. It allows quick entry/edit and also browsing is convenient - see "Dictionary" navbar option. It does not allow to introduce words that already are in dictionary.
 
