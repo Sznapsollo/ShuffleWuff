@@ -75,7 +75,6 @@ app.component('word-popup', {
 		}
 
 		const onSubmit = function(e) {
-			debugger
 			e.preventDefault();
 			if(canSave() && !sameAsInitial()) {
 				saveWord(true);

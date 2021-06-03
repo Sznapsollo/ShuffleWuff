@@ -45,6 +45,11 @@ var app = Vue.createApp({
 			$('#wordModal').modal('toggle');
 		}
 
+		const prepareTest = function() {
+			window.mittEmitter.emit('prepareTest', {header: "Prepare test"});
+			$('#prepareTestModal').modal('toggle');
+		}
+
 		const deleteWord = function(deleteItem) {
 			for(var deleteIndex = 0; deleteIndex < sharedDictionaryData.items.length; deleteIndex++) {
 				if(deleteItem == sharedDictionaryData.items[deleteIndex].languageFrom) {
@@ -106,7 +111,7 @@ var app = Vue.createApp({
 
 			changedItem.languageFrom = changedItem.languageFrom.toLowerCase()
 			changedItem.languageTo = changedItem.languageTo.toLowerCase()
-			changedItem.changeDate = new Date()
+			changedItem.changeDate = (new Date()).yyyymmdd()
 
 			let foundItem = sharedDictionaryData.items.find(function(item){return item == changedItem})
 
@@ -150,6 +155,7 @@ var app = Vue.createApp({
 			loadDictionaryData,
 			dictionaryNeedsSaving,
 			requestInProgress,
+			prepareTest,
 			saveDictionaryData,
 			saveWord
 		}
