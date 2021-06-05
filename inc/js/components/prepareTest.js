@@ -25,9 +25,14 @@ app.component('prepare-test', {
 									<label for="testMode">Mode:</label>
 									<select id="testMode" class="form-control" v-model="mode"><option v-for="option in modes" v-bind:value="option">{{option}}</option></select>
 									<br/>
-									<label for="separatorValue">separator:</label>
-									<select id="separatorValue" class="form-control" v-model="separator"><option v-for="option in separators" v-bind:value="option">{{option}}</option></select>
+									<label for="outputValue">output:</label>
+									<select id="outputValue" class="form-control" v-model="output"><option v-for="option in outputs" v-bind:value="option">{{option}}</option></select>
 									<br/>
+									<div v-if="output == 'clipboard'">
+										<label for="separatorValue">separator:</label>
+										<select id="separatorValue" class="form-control" v-model="separator"><option v-for="option in separators" v-bind:value="option">{{option}}</option></select>
+										<br/>
+									</div>
 									<button style="display: none" type="submit" @click="onSubmit"></button>
 								</form>
 							</p>
@@ -43,12 +48,14 @@ app.component('prepare-test', {
 		</div>
 	`,
 	setup() {
-		const howManyWords = Vue.ref(100)
+		const howManyWords = Vue.ref(150)
 		const modes = Vue.ref(['all (random)','latest'])
 		const languages = Vue.ref([])
 		const language = Vue.ref('')
 		const separators = Vue.ref(['new line', 'comma'])
 		const separator = Vue.ref('new line')
+		const outputs = Vue.ref(['clipboard', 'print'])
+		const output = Vue.ref('print')
 		const header = Vue.ref('')
 		const mode = Vue.ref('latest')
 		let errorMessage = null
@@ -65,9 +72,8 @@ app.component('prepare-test', {
 			/* Get the text field */
 			$("#testWordsTextArea").show()
 			var copyText = document.getElementById("testWordsTextArea");
-			let separatorLocal = separator.value == 'comma' ? ',' : '\n'
 			
-			copyText.value = shuffledWords.join(separatorLocal);
+			copyText.value = shuffledWords;
 			/* Select the text field */
 			copyText.select();
 			copyText.setSelectionRange(0, 99999); /* For mobile devices */
@@ -103,7 +109,18 @@ app.component('prepare-test', {
 				return i[propName]
 				})
 			
-			copyToClipBoard(wordsResults)
+			let separatorLocal = separator.value == 'comma' ? ',' : '\n'
+			if(output.value == 'clipboard') {
+				wordsResults = wordsResults.join(separatorLocal)
+				copyToClipBoard(wordsResults)
+			} else if(output.value == 'print') {
+				let htmlResultColumns = '<div>'
+				wordsResults.forEach(function(wordItem) {
+					htmlResultColumns += '<div class="printWord">' + wordItem + '</div>'
+				})
+				htmlResultColumns += '</div>'
+				PrintData(htmlResultColumns)
+			}
 		}
 
 		const validateEditorValues = function() {
@@ -139,6 +156,8 @@ app.component('prepare-test', {
 			languages,
 			mode,
 			modes,
+			output,
+			outputs,
 			onSubmit,
 			prepareTest,
 			header,

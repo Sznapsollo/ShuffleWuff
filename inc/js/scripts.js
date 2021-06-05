@@ -26,3 +26,25 @@ function shuffleArray(array) {
         array[j] = temp;
     }
 }
+
+function PrintData(data)
+{
+    var mywindow = window.open('', 'PRINT', 'height=400,width=600');
+
+	mywindow.document.write('<html><head><title>' + document.title  + '</title>');
+	mywindow.document.write('<link rel="stylesheet" href="inc/css/styles.css" />');
+    mywindow.document.write('</head><body >');
+    mywindow.document.write(data);
+    mywindow.document.write('</body></html>');
+
+    mywindow.document.close(); // necessary for IE >= 10
+    mywindow.focus(); // necessary for IE >= 10*/
+
+	// without timeou there are no styles so going with it for now
+	setTimeout(function() {
+		mywindow.print();
+    	mywindow.close();	
+	}, 100)
+    
+    return true;
+}

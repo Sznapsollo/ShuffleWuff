@@ -11,6 +11,10 @@ input[type=checkbox]
   padding: 10px;
 }
 
+.printWord {
+	width: 230px;
+	float: left;
+}
 
 .saveDictionaryLink {
 	color: red;
