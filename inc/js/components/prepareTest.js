@@ -86,7 +86,46 @@ app.component('prepare-test', {
 			setTimeout(function() {
 				$(".copiedToClipboardAlert").hide('slow')
 			}, 5000)
-		  }
+		}
+
+		const rememberSettings = function() {
+			let testCriteria = {
+				language: language.value,
+				howManyWords: howManyWords.value,
+				output: output.value,
+				mode: mode.value,
+				separator: separator.value
+			}
+			setCookie('SFTestCriteria', btoa(escape(JSON.stringify(testCriteria))), 14)
+		}
+
+		const loadRememberedSettings = function() {
+			var cookie = getCookie('SFTestCriteria')
+			if(!cookie) {
+				return {}
+			}
+		
+			var cachedProperties = JSON.parse(unescape(atob(cookie)))
+			if(!cachedProperties) {
+				return
+			}
+	
+			if(cachedProperties.language) {
+				language.value = cachedProperties.language
+			}
+			if(cachedProperties.howManyWords) {
+				howManyWords.value = cachedProperties.howManyWords
+			}
+			if(cachedProperties.output) {
+				output.value = cachedProperties.output
+			}
+			if(cachedProperties.mode) {
+				mode.value = cachedProperties.mode
+			}
+			if(cachedProperties.separator) {
+				separator.value = cachedProperties.separator
+			}
+		}
 
 		const prepareTest = function(e) {
 			let wordsResults = []
@@ -121,6 +160,7 @@ app.component('prepare-test', {
 				htmlResultColumns += '</div>'
 				PrintData(htmlResultColumns)
 			}
+			rememberSettings()
 		}
 
 		const validateEditorValues = function() {
@@ -141,6 +181,7 @@ app.component('prepare-test', {
 
 			window.mittEmitter.on('dataLoaded', function(){
 				fillLanguagesDropdowns();
+				loadRememberedSettings()
 			});
 
 			window.mittEmitter.on('prepareTest', function(popupInfo){
