@@ -31,6 +31,7 @@ const score = {
 	points: 0,
 	score: 0,
 	correctAnswers: 0,
+	skippedAnswers: 0,
 	incorrectAnswers: 0
 }
 

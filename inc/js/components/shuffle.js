@@ -21,10 +21,15 @@ const Shuffle = {
 					</div>
 					<i v-if="!isLoaded" class="fa fa-cog fa-2x fa-spin"></i>
 				</div>
-				<div class="container">
+				<div class="container" style="padding-bottom: 0px;">
 					Points:<span class="score points" v-bind:class="{ goodScores: scoreLocal.points > 0, badScores: scoreLocal.points < 0 }">{{scoreLocal.points}}</span>
 					Word No.:<span class="score">{{scoreLocal.displayed}}</span>
 					Score:<span class="score points">{{scoreLocal.score}}%</span>
+				</div>
+				<div class="container" style="padding-top: 0px;">
+					Good:<span class="score goodScores">{{scoreLocal.correctAnswers}}</span>
+					Skipped:<span class="score">{{scoreLocal.skippedAnswers}}</span>
+					Bad:<span class="score badScores">{{scoreLocal.incorrectAnswers}}</span>
 				</div>
 				<div class="container">
 					<button type="button" class="btn btn-success btn-lg" v-on:click="calculateScore(true)">Good answer</button>
@@ -32,7 +37,7 @@ const Shuffle = {
 					<button type="button" class="btn btn-danger btn-lg" v-on:click="calculateScore(false)">Bad answer</button>
 				</div>
 				<div class="container">
-					<button type="button" class="btn btn-light" v-on:click="shuffleWord()">Shuffle another</button>
+					<button type="button" class="btn btn-light" v-on:click="shuffleWord(true)">Shuffle another</button>
 					&nbsp;
 					<button type="button" class="btn btn-light" v-on:click="cleanScore()">Clean Score</button>
 				</div>
@@ -86,7 +91,6 @@ const Shuffle = {
 			}
 
 			const calculateScore = function(isCorrect) {
-				var currObject = this;
 				scoreLocal.value.attempts++;
 				
 				if(isCorrect)
@@ -108,7 +112,7 @@ const Shuffle = {
 					$(".result h1").removeClass(whatScores);
 					
 					if(automaticShuffle.value) {
-						currObject.shuffleWord();
+						shuffleWord();
 					}
 				}, 1000)
 			}
@@ -136,11 +140,15 @@ const Shuffle = {
 				});
 			}
 
-			const shuffleWord = function () {
+			const shuffleWord = function (byUser) {
 				let shuffledWord= sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
 				shuffledItem = shuffledWord
 				word.value = shuffledItem[propName] ? shuffledItem[propName] : '---'
 				scoreLocal.value.displayed++;
+
+				if(byUser == true) {
+					scoreLocal.value.skippedAnswers++;
+				}
 
 				shuffleLetters();
 			}
@@ -154,6 +162,7 @@ const Shuffle = {
 					scoreLocal.value.score = 0;
 					scoreLocal.value.displayed = 0;
 					scoreLocal.value.correctAnswers = 0;
+					scoreLocal.value.skippedAnswers = 0;
 					scoreLocal.value.incorrectAnswers = 0;
 					
 					$(".score").removeClass("hidden");
