@@ -76,6 +76,7 @@ app.component('word-popup', {
 
 		const onSubmit = function(e) {
 			e.preventDefault();
+			validateEditorValues()
 			if(canSave() && !sameAsInitial()) {
 				saveWord(true);
 			}
