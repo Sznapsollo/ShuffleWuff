@@ -26,7 +26,7 @@ app.component('user-settings-popup', {
 									<div class="container">
 										<input type="checkbox" name="showTranslated" id="playSkipAnswerSound" v-model="playSkipAnswerSound">
 										&nbsp;
-										<label style="cursor: pointer" for="playSkipAnswerSound">Play bad answer sound</label>
+										<label style="cursor: pointer" for="playSkipAnswerSound">Play skip answer sound</label>
 									</div>
 
 									<button style="display: none" type="submit" @click="onSubmit"></button>
