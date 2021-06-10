@@ -96,7 +96,7 @@ app.component('prepare-test', {
 				mode: mode.value,
 				separator: separator.value
 			}
-			setCookie('SFTestCriteria', btoa(escape(JSON.stringify(testCriteria))), 14)
+			setCookie('SFTestCriteria', btoa(escape(JSON.stringify(testCriteria))), 365)
 		}
 
 		const loadRememberedSettings = function() {

@@ -1,18 +1,3 @@
-/* todo
-	- switch db to csv format
-	- save as csv
-	- add translation to existing items
-	- add changed date to existing items
-	- add sort option by changed date
-	- add translation to existing items
-	- add translation handling to add new word, edit new word, sort by
-	- add option to hide translation from dictionary
-	- tests generator 
-	- tests generator : how many
-	- tests generator: fereign or translation
-	- tests generator: all/newest (by changed date)
-	- dictionary item
-*/
 
 const languagesDropdowns = {
 	languages: [],
@@ -35,6 +20,10 @@ const score = {
 	incorrectAnswers: 0
 }
 
+const userSettings = {
+
+}
+
 var app = Vue.createApp({
 	setup() {
 		const dictionaryNeedsSaving = Vue.ref(false)
@@ -44,6 +33,11 @@ var app = Vue.createApp({
 		const addDictionaryData = function() {
 			window.mittEmitter.emit('editWord', {header: "New word", item: null});
 			$('#wordModal').modal('toggle');
+		}
+
+		const showUserSettings = function() {
+			window.mittEmitter.emit('showUserSettings', {});
+			$('#userSettingsModal').modal('toggle');
 		}
 
 		const prepareTest = function() {
@@ -139,6 +133,19 @@ var app = Vue.createApp({
 			}
 		}
 
+		const loadUserSettings = function() {
+			var cookie = getCookie('SFUserSettings')
+		
+			var cachedUserSettings
+			if(cookie) {
+				cachedUserSettings = JSON.parse(unescape(atob(cookie)))
+			}
+			
+			userSettings.playGoodAnswerSound = cachedUserSettings ? cachedUserSettings.playGoodAnswerSound == true : true
+			userSettings.playBadAnswerSound = cachedUserSettings ? cachedUserSettings.playBadAnswerSound == true : true
+			userSettings.playSkipAnswerSound = cachedUserSettings ? cachedUserSettings.playSkipAnswerSound == true : true
+		}
+
 		Vue.onMounted(function() {
 			window.mittEmitter.on('deleteWord', function(item){
 				deleteWord(item);
@@ -146,6 +153,7 @@ var app = Vue.createApp({
 			window.mittEmitter.on('saveWord', function(args){
 				saveWord(args);
 			}); 
+			loadUserSettings()
 		})
 
 		loadDictionaryData()
@@ -158,7 +166,8 @@ var app = Vue.createApp({
 			requestInProgress,
 			prepareTest,
 			saveDictionaryData,
-			saveWord
+			saveWord,
+			showUserSettings
 		}
 	}
 })

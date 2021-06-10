@@ -71,3 +71,32 @@ function getCookie(cname) {
     }
     return "";
 }
+
+var sounds = {}
+function playSound(type) {
+    try {
+        let soundFile
+        if(!sounds[type]) {
+            switch(type) {
+                case 'good':
+                    sounds[type] = new Audio('inc/sounds/bellbike.wav')
+                    break;
+                case 'bad':
+                    sounds[type] = new Audio('inc/sounds/fart.wav')
+                    break;
+                case 'skip':
+                    sounds[type] = new Audio('inc/sounds/combteeth.wav')
+                    break;
+            }
+        }
+        if(sounds[type]) {
+            if (sounds[type].paused) {
+                sounds[type].play();
+            } else{
+                sounds[type].currentTime = 0
+            }
+        }
+    } catch(e) {
+        console.warn('playAlertSound warn')
+    }
+}

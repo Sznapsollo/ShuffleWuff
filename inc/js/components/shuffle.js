@@ -93,10 +93,17 @@ const Shuffle = {
 			const calculateScore = function(isCorrect) {
 				scoreLocal.value.attempts++;
 				
-				if(isCorrect)
+				if(isCorrect) {
 					scoreLocal.value.correctAnswers++;
-				else
+					if(userSettings.playGoodAnswerSound) {
+						playSound('good')
+					}
+				} else {
 					scoreLocal.value.incorrectAnswers++;
+					if(userSettings.playBadAnswerSound) {
+						playSound('bad')
+					}
+				}
 				
 				scoreLocal.value.points = scoreLocal.value.correctAnswers*goodPoints.value - scoreLocal.value.incorrectAnswers*minusPoints.value;
 				scoreLocal.value.score = scoreLocal.value.attempts == 0 ? 0 : ((100*scoreLocal.value.correctAnswers)/(scoreLocal.value.attempts)).toFixed(0);
@@ -148,6 +155,9 @@ const Shuffle = {
 
 				if(byUser == true) {
 					scoreLocal.value.skippedAnswers++;
+					if(userSettings.playSkipAnswerSound) {
+						playSound('skip')
+					}
 				}
 
 				shuffleLetters();
