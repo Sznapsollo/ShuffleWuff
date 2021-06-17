@@ -87,12 +87,9 @@ app.component('word-popup', {
 				errorMessage = {wordPopupForeignTextBox:"Field From cannot be empty"};
 				errorMessageText.value = "Field From cannot be empty"
 				return;
-			} else if(!languageToText.value || languageToText.value.length == 0) {
-				errorMessage = {wordPopupOriginTextBox: "Field To cannot be empty"};
-				errorMessageText.value = "Field To cannot be empty"
-				return;
 			}
-			else if(!sameAsInitial()){
+			
+			if(!sameAsInitial()){
 				var results = sharedDictionaryData.items.filter(function(element, index, array) {
 					return (item != element) && (element.languageFrom.toLowerCase() === languageFromText.value.toLowerCase());
 				});
@@ -102,6 +99,12 @@ app.component('word-popup', {
 					return;
 				}
 				
+			} 
+			
+			if(!languageToText.value || languageToText.value.length == 0) {
+				errorMessage = {wordPopupOriginTextBox: "Field To cannot be empty"};
+				errorMessageText.value = "Field To cannot be empty"
+				return;
 			}
 			
 			errorMessage = null;
