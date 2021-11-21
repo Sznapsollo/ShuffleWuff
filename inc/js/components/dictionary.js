@@ -27,7 +27,9 @@ const Dictionary = {
 						v-bind:index="index" 
 						v-bind:key="item.languageFrom" 
 						v-for="(item, index) in dictionaryListDataDisplayed"
-						></dictionary-list-item>
+						>
+					</dictionary-list-item>
+					<div v-show="dataLoading" style="width: 100%; text-align: center;"><img src="./inc/loading.gif" style="border-radius: 5px; width: 100px; "></div>
 				</ul>
 			</div>
 		</div>`,
@@ -39,6 +41,7 @@ const Dictionary = {
 		const dictionaryListDataDisplayed = Vue.ref([])
 		const showTranslated = Vue.ref(true)
 		const route = VueRouter.useRoute()
+		const dataLoading = Vue.ref(false)
 		let showRowsNum = 100
 		let scrollPosition = 0
 
@@ -75,6 +78,11 @@ const Dictionary = {
 			});	
 
 			dictionaryListDataDisplayed.value = dictionaryListData.value.slice(0,showRowsNum)
+			if(dictionaryListDataDisplayed.value.length < dictionaryListData.value.length) {
+				dataLoading.value = true
+			} else {
+				dataLoading.value = false
+			}
 		}
 
 		const refreshList = function() {
@@ -145,6 +153,7 @@ const Dictionary = {
 		})
 
 		return {
+			dataLoading,
 			dictionaryListData,
 			dictionaryListDataDisplayed,
 			searchPhrase,
