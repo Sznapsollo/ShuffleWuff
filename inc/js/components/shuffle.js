@@ -41,6 +41,9 @@ const Shuffle = {
 					&nbsp;
 					<button type="button" class="btn btn-light" v-on:click="cleanScore()">Clean Score</button>
 				</div>
+				<div v-if="wordsHistory.length" class="container">
+					<a href="#" v-on:click="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;previous word</a>
+				</div>
 				<div class="container">
 					<input type="checkbox" name="automatic_shuffle" id="automatic_shuffle_chbx" v-model="automaticShuffle">
 					&nbsp;
@@ -68,6 +71,7 @@ const Shuffle = {
 			const word = Vue.ref("")
 			const showTranslated = Vue.ref(false)
 			let shuffledItem = {}
+			const wordsHistory = Vue.ref([])
 
 			const randomEffect = function(items) {
 				return items[Math.floor(Math.random()*items.length)];
@@ -147,7 +151,19 @@ const Shuffle = {
 				});
 			}
 
+			const goBack = function() {
+				if(!wordsHistory.value || !wordsHistory.value.length) {
+					return
+				}
+				word.value = wordsHistory.value.pop()
+				shuffleLetters();
+			}
+
 			const shuffleWord = function (byUser) {
+				if(word.value && word.value.length) {
+					wordsHistory.value.push(word.value)
+				}
+
 				let shuffledWord= sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
 				shuffledItem = shuffledWord
 				word.value = shuffledItem[propName] ? shuffledItem[propName] : '---'
@@ -166,6 +182,8 @@ const Shuffle = {
 			const cleanScore = function() {
 				$(".score").addClass("hidden");
 				
+				wordsHistory.value = []
+
 				setTimeout(function() {
 					scoreLocal.value.points = 0;
 					scoreLocal.value.attempts = 0;
@@ -215,6 +233,7 @@ const Shuffle = {
 				editWord,
 				fillLanguagesDropdowns,
 				flipToFrom,
+				goBack,
 				goodPoints,
 				isLoaded,
 				languages,
@@ -228,6 +247,7 @@ const Shuffle = {
 				shuffleLetters,
 				shuffleWord,
 				word,
+				wordsHistory
 			}
 		}
 	}
