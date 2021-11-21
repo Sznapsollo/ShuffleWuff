@@ -4,7 +4,7 @@
 
 ShuffleWuff is language learning Tool for kids. I build to do fun and efficient English lessons with my son. 
 
-It is Vue.js single page app, easily deployable requires just any web server with php support. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect. File format is CSV.
+It is Vue.js (3.x) single page app, easily deployable requires just any web server with php support. Does not require database - works entirely on file content (which has its limitation when more users would use it in parallel) but for single lessons is perfect. File format is CSV.
 
 ## Demo
 **<a href="http://cultrides.com/test/Github/ShuffleWuff" target="_blank">Click here to see Demo</a>** - of course adding new words and deleting existing dictionary items will not work in demo since its data file is shared for everyone. Demo contains example data which is also present in this repository under "dictionary/data.csv". It cannot be changed in demo but you would be able to change it if you hosted ShuffleWuff yourself and your server would have access to "dictionary/data.csv" file.
