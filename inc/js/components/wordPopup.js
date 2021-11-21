@@ -40,6 +40,10 @@ app.component('word-popup', {
 		const errorMessageText = Vue.ref('')
 
 		const saveWord = function(addAnother) {
+			validateEditorValues()
+			if(!canSave() || sameAsInitial()) {
+				return
+			}
 			item = item ? item : {}
 			item.languageFrom = languageFromText.value
 			item.languageTo = languageToText.value

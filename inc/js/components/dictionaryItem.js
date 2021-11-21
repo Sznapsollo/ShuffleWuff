@@ -2,6 +2,7 @@ app.component('dictionary-list-item', {
 	props: ['index', 'item', 'searchPhrase', 'showTranslated'],
 	template: `
 		<li class="list-group-item">
+			{{index+1}}.&nbsp;
 			<a target="_self" v-bind:href="'#item-'+index" data-toggle="collapse" class="text-dark" style="display: inline-block; width: 90%">
 				<i class="glyphicon glyphicon-chevron-right"></i>
 				<span v-html="highlight(itemLanguageFrom)"></span>

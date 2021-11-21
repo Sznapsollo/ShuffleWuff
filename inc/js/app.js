@@ -26,7 +26,7 @@ const userSettings = {
 
 var app = Vue.createApp({
 	setup() {
-		const dictionaryNeedsSaving = Vue.ref(false)
+		const dictionaryChanges = Vue.ref(0)
 		const requestInProgress = Vue.ref(false)
 		const servicesAddress = settings.servicesAddress
 
@@ -50,7 +50,7 @@ var app = Vue.createApp({
 				if(deleteItem == sharedDictionaryData.items[deleteIndex].languageFrom) {
 					sharedDictionaryData.items.splice(deleteIndex, 1);
 					console.log('deleted ' + deleteItem);
-					dictionaryNeedsSaving.value = true;
+					dictionaryChanges.value++;
 					window.mittEmitter.emit('deletedWord', {});
 					break;
 				}
@@ -89,7 +89,7 @@ var app = Vue.createApp({
 			}).then(response => {
 				sharedDictionaryData.loaded = false;
 				requestInProgress.value = false;
-				dictionaryNeedsSaving.value = false;
+				dictionaryChanges.value = 0;
 				loadDictionaryData();
 			}).catch(function (error) {
 				sharedDictionaryData.loaded = false;
@@ -111,12 +111,12 @@ var app = Vue.createApp({
 			let foundItem = sharedDictionaryData.items.find(function(item){return item == changedItem})
 
 			if(foundItem) {
-				dictionaryNeedsSaving.value = true;
+				dictionaryChanges.value++;
 				$('#dictionaryList').find('.collapse.show').collapse('hide');
 				console.log('saved ' + changedItem.languageFrom);
 			} else {
 				sharedDictionaryData.items.push(changedItem);
-				dictionaryNeedsSaving.value = true;
+				dictionaryChanges.value++;
 				console.log('saved new ' + changedItem);
 			}
 			
@@ -124,7 +124,7 @@ var app = Vue.createApp({
 
 			window.mittEmitter.emit('savedWord', changedItem);
 
-			if(dictionaryNeedsSaving.value) {
+			if(dictionaryChanges.value > 0) {
 				window.mittEmitter.emit('clearEdit', true);
 				if(addAnother)
 					window.mittEmitter.emit('editWord', {header: "New word", item: null});
@@ -162,7 +162,7 @@ var app = Vue.createApp({
 			addDictionaryData,
 			deleteWord,
 			loadDictionaryData,
-			dictionaryNeedsSaving,
+			dictionaryChanges,
 			requestInProgress,
 			prepareTest,
 			saveDictionaryData,
