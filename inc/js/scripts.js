@@ -87,6 +87,12 @@ function playSound(type) {
                 case 'skip':
                     sounds[type] = new Audio('inc/sounds/combteeth.wav')
                     break;
+                case 'goBack':
+                    sounds[type] = new Audio('inc/sounds/beep.wav')
+                    break;
+                case 'goForth':
+                    sounds[type] = new Audio('inc/sounds/beep.wav')
+                    break;
             }
         }
         if(sounds[type]) {

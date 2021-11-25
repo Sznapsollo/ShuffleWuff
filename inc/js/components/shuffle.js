@@ -41,8 +41,10 @@ const Shuffle = {
 					&nbsp;
 					<button type="button" class="btn btn-light" v-on:click="cleanScore()">Clean Score</button>
 				</div>
-				<div v-if="wordsHistory.length" class="container">
-					<a href="#" v-on:click="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;previous word</a>
+				<div v-if="wordsHistory.length || clipboardWord" class="container">
+					<a v-if="wordsHistory.length" href="#" v-on:click="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;previous word</a>
+					&nbsp;
+					<a v-if="clipboardWord" href="#" v-on:click="goForth()">next word&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i></a>
 				</div>
 				<div class="container">
 					<input type="checkbox" name="automatic_shuffle" id="automatic_shuffle_chbx" v-model="automaticShuffle">
@@ -72,6 +74,7 @@ const Shuffle = {
 			const showTranslated = Vue.ref(false)
 			let shuffledItem = {}
 			const wordsHistory = Vue.ref([])
+			const clipboardWord = Vue.ref(null)
 
 			const randomEffect = function(items) {
 				return items[Math.floor(Math.random()*items.length)];
@@ -155,24 +158,44 @@ const Shuffle = {
 				if(!wordsHistory.value || !wordsHistory.value.length) {
 					return
 				}
+				clipboardWord.value = word.value
 				word.value = wordsHistory.value.pop()
 				shuffleLetters();
+				if(userSettings.playGoBackSound) {
+					playSound('goBack');
+				}
+			}
+
+			const goForth = function() {
+				if(!clipboardWord.value || !clipboardWord.value.length) {
+					return
+				}
+				if(word.value && word.value.length) {
+					wordsHistory.value.push(word.value);
+				}
+				word.value = clipboardWord.value;
+				clipboardWord.value = null;
+				shuffleLetters();
+				if(userSettings.playGoForthSound) {
+					playSound('goForth');
+				}
 			}
 
 			const shuffleWord = function (byUser) {
 				if(word.value && word.value.length) {
-					wordsHistory.value.push(word.value)
+					wordsHistory.value.push(word.value);
 				}
+				clipboardWord.value = null;
 
 				let shuffledWord= sharedDictionaryData.items[Math.floor(Math.random()*sharedDictionaryData.items.length)];
-				shuffledItem = shuffledWord
-				word.value = shuffledItem[propName] ? shuffledItem[propName] : '---'
+				shuffledItem = shuffledWord;
+				word.value = shuffledItem[propName] ? shuffledItem[propName] : '---';
 				scoreLocal.value.displayed++;
 
 				if(byUser == true) {
 					scoreLocal.value.skippedAnswers++;
 					if(userSettings.playSkipAnswerSound) {
-						playSound('skip')
+						playSound('skip');
 					}
 				}
 
@@ -182,7 +205,7 @@ const Shuffle = {
 			const cleanScore = function() {
 				$(".score").addClass("hidden");
 				
-				wordsHistory.value = []
+				wordsHistory.value = [];
 
 				setTimeout(function() {
 					scoreLocal.value.points = 0;
@@ -230,10 +253,12 @@ const Shuffle = {
 				automaticShuffle,
 				calculateScore,
 				cleanScore,
+				clipboardWord,
 				editWord,
 				fillLanguagesDropdowns,
 				flipToFrom,
 				goBack,
+				goForth,
 				goodPoints,
 				isLoaded,
 				languages,

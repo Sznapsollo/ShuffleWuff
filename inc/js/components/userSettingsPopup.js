@@ -14,19 +14,29 @@ app.component('user-settings-popup', {
 							<p>
 								<form autocomplete="off" >
 									<div class="container">
-										<input type="checkbox" name="showTranslated" id="playGoodAnswerSound" v-model="playGoodAnswerSound">
+										<input type="checkbox" name="playGoodAnswerSound" id="playGoodAnswerSound" v-model="playGoodAnswerSound">
 										&nbsp;
 										<label style="cursor: pointer" for="playGoodAnswerSound">Play good answer sound</label>
 									</div>
 									<div class="container">
-										<input type="checkbox" name="showTranslated" id="playBadAnswerSound" v-model="playBadAnswerSound">
+										<input type="checkbox" name="playBadAnswerSound" id="playBadAnswerSound" v-model="playBadAnswerSound">
 										&nbsp;
 										<label style="cursor: pointer" for="playBadAnswerSound">Play bad answer sound</label>
 									</div>
 									<div class="container">
-										<input type="checkbox" name="showTranslated" id="playSkipAnswerSound" v-model="playSkipAnswerSound">
+										<input type="checkbox" name="playSkipAnswerSound" id="playSkipAnswerSound" v-model="playSkipAnswerSound">
 										&nbsp;
 										<label style="cursor: pointer" for="playSkipAnswerSound">Play skip answer sound</label>
+									</div>
+									<div class="container">
+										<input type="checkbox" name="playGoBackSound" id="playGoBackSound" v-model="playGoBackSound">
+										&nbsp;
+										<label style="cursor: pointer" for="playGoBackSound">Play previous word sound</label>
+									</div>
+									<div class="container">
+										<input type="checkbox" name="playGoForthSound" id="playGoForthSound" v-model="playGoForthSound">
+										&nbsp;
+										<label style="cursor: pointer" for="playGoForthSound">Play next word sound</label>
 									</div>
 
 									<button style="display: none" type="submit" @click="onSubmit"></button>
@@ -49,11 +59,15 @@ app.component('user-settings-popup', {
 		const playGoodAnswerSound = Vue.ref(false)
 		const playBadAnswerSound = Vue.ref(false)
 		const playSkipAnswerSound = Vue.ref(false)
+		const playGoBackSound = Vue.ref(false)
+		const playGoForthSound = Vue.ref(false)
 
 		const saveUserSettings = function(addAnother) {
 			userSettings.playGoodAnswerSound = playGoodAnswerSound.value
 			userSettings.playBadAnswerSound = playBadAnswerSound.value
 			userSettings.playSkipAnswerSound = playSkipAnswerSound.value
+			userSettings.playGoBackSound = playGoBackSound.value
+			userSettings.playGoForthSound = playGoForthSound.value
 			setCookie('SFUserSettings', btoa(escape(JSON.stringify(userSettings))), 365)
 			$('#userSettingsModal').modal('toggle');
 		}
@@ -74,6 +88,8 @@ app.component('user-settings-popup', {
 				playGoodAnswerSound.value = userSettings.playGoodAnswerSound
 				playBadAnswerSound.value = userSettings.playBadAnswerSound
 				playSkipAnswerSound.value = userSettings.playSkipAnswerSound
+				playGoBackSound.value = userSettings.playGoBackSound
+				playGoForthSound.value = userSettings.playGoForthSound
 			});
 		})
 
@@ -83,6 +99,8 @@ app.component('user-settings-popup', {
 			playGoodAnswerSound,
 			playBadAnswerSound,
 			playSkipAnswerSound,
+			playGoBackSound,
+			playGoForthSound,
 			header,
 			errorMessageText,
 			saveUserSettings,
