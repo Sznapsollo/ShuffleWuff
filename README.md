@@ -19,6 +19,8 @@ In the end final score is used to determine what fun stuff we would do later on.
 
 There is also an option "Prepare test" which i use to generate some set of words latest or shuffled to check how the student will perform. This option allows to generate set of works in chosen language and copy it to clipboard or straightto printer. Very convinient to check set of words that were on the board for lat week or so and now is time to wipe them down to make place for new ones.
 
+Also there are sounds associated to different buttons. These sounds can be disabled in settings. Sounds are there for one reason - if "student" uses ShuffleWuff with some task to do - he/she cannot cheat by changing unwanted word since sound would give it away.
+
 This is how I do it. Perhaps you will also find it suit the way you teach your kid. Just please remember it is meant to be fun. 
 
 ## What you need to run it
