@@ -14,6 +14,14 @@ app.component('word-popup', {
 							<p>
 								<form autocomplete="off" >
 									<input id="wordPopupForeignTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSaveField('wordPopupForeignTextBox')}" class="form-control" v-model='languageFromText' style="-webkit-user-modify: read-write-plaintext-only;" placeholder="Your foreign word here">
+									<ul v-if="searchWords.length" style="    list-style-type: none;padding: 0;color: #333333;font-size: 10pt;">
+										<li style="padding: 3px 0 3px 0; color: #666666;">
+											Showing {{ searchWords.length }} of {{ allSearchWordsCount }} words containing this phraze
+										</li>
+										<li style="cursor: pointer;" v-for="word in searchWords" :key="word.languageFrom" @click="selectAutocompleteWord(word.languageFrom)">
+											<span v-html="word.languageFrom.replaceAll(languageFromText,'<b>' + languageFromText + '</b>')"></span>
+										</li>
+									</ul>
 									<br/>
 									<input id="wordPopupOriginTextBox" autocomplete="off" type="text" v-bind:class="{'is-invalid':!canSaveField('wordPopupOriginTextBox')}" class="form-control" v-model='languageToText' style="-webkit-user-modify: read-write-plaintext-only;" placeholder="Your origin word here">
 									<button style="display: none" type="submit" @click="onSubmit"></button>
@@ -36,6 +44,8 @@ app.component('word-popup', {
 		const languageFromText = Vue.ref('')
 		const languageToText = Vue.ref('')
 		const header = Vue.ref('')
+		const allSearchWordsCount = Vue.ref(0)
+		const searchWords = Vue.ref([])
 		let errorMessage = null
 		const errorMessageText = Vue.ref('')
 
@@ -86,6 +96,10 @@ app.component('word-popup', {
 			}
 		}
 
+		const selectAutocompleteWord = function(autocompleteWord) {
+			languageFromText.value = autocompleteWord
+		}
+
 		const validateEditorValues = function() {
 			if(!languageFromText.value || languageFromText.value.length == 0) {
 				errorMessage = {wordPopupForeignTextBox:"Field From cannot be empty"};
@@ -117,6 +131,24 @@ app.component('word-popup', {
 
 		Vue.watch(languageFromText, (languageFromTextValue, oldLnguageFromTextValue) => {
 			validateEditorValues()
+			var autocompleteMatches = 0;
+			allSearchWordsCount.value = 0
+			if(languageFromText.value && languageFromText.value.length) {
+				var dataToBeSearched = sharedDictionaryData.items.slice() 
+				var searchWordsTemp = dataToBeSearched.filter(function(element, index, array) {
+					if(element.languageFrom.toLowerCase().includes(languageFromText.value.toLowerCase())) {
+						allSearchWordsCount.value++
+						if(autocompleteMatches < 5) {
+							autocompleteMatches++
+							return element
+						}
+					}
+					return null
+				});
+				searchWords.value = searchWordsTemp ? searchWordsTemp.slice() : []
+			} else {
+				searchWords.value = []
+			}
 		})
 
 		Vue.watch(languageToText, (languageToTextValue, oldLnguageToTextValue) => {
@@ -138,6 +170,7 @@ app.component('word-popup', {
 		})
 
 		return {
+			allSearchWordsCount,
 			canSave,
 			canSaveField,
 			clearForm,
@@ -148,6 +181,8 @@ app.component('word-popup', {
 			errorMessageText,
 			sameAsInitial,
 			saveWord,
+			searchWords,
+			selectAutocompleteWord,
 			validateEditorValues
 		}
 	}
