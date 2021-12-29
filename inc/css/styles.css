@@ -155,3 +155,22 @@ input[type=checkbox]
 .navbar-light .navbar-nav .active {
 	font-weight: 700;
 }
+
+.pointsButton {
+    /* transition: all .5s ease-in-out; */
+    opacity: 0;
+    animation: appearIn .5s both;
+}
+
+
+@keyframes appearIn {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes shrinkWidth {
+    to {
+        width: 0;
+    }
+}

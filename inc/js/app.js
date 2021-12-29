@@ -146,6 +146,7 @@ var app = Vue.createApp({
 			userSettings.playSkipAnswerSound = cachedUserSettings ? cachedUserSettings.playSkipAnswerSound == true : true
 			userSettings.playGoBackSound = cachedUserSettings ? cachedUserSettings.playGoBackSound == true : true
 			userSettings.playGoForthSound = cachedUserSettings ? cachedUserSettings.playGoForthSound == true : true
+			userSettings.playVoice = cachedUserSettings ? cachedUserSettings.playVoice == true : true
 		}
 
 		Vue.onMounted(function() {

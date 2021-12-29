@@ -32,9 +32,14 @@ const Shuffle = {
 					Bad:<span class="score badScores">{{scoreLocal.incorrectAnswers}}</span>
 				</div>
 				<div class="container">
-					<button type="button" class="btn btn-success btn-lg" v-on:click="calculateScore(true)">Good answer</button>
+					<button type="button" class="btn btn-success btn-lg" v-on:click="generatePointsOptions(true)">Good answer</button>
 					&nbsp;
-					<button type="button" class="btn btn-danger btn-lg" v-on:click="calculateScore(false)">Bad answer</button>
+					<button type="button" class="btn btn-danger btn-lg" v-on:click="generatePointsOptions(false)">Bad answer</button>
+				</div>
+				<div class="container" v-if="pointsButtons.length" class="pointsOptions">
+					<div v-if="showPointsTimerBarColor" v-bind:style="{background: showPointsTimerBarColor }" style="opacity: 0.6; height: 5px; width: 80%; display: inline-block; animation: shrinkWidth 5.0s both; margin: 0 0 5px 0;"></div>
+					<br>
+					<button type="button" style="margin: 0 3px 0 3px;" class="btn btn-lg pointsButton" v-for="pointsButton in pointsButtons" v-bind:class="{ 'btn-success': pointsButton.points > 0, 'btn-danger': pointsButton.points < 0}" v-on:click="calculateScore(pointsButton.points)">{{pointsButton.points}}</button>
 				</div>
 				<div class="container">
 					<button type="button" class="btn btn-light" v-on:click="shuffleWord(true)">Shuffle another</button>
@@ -61,20 +66,21 @@ const Shuffle = {
 
 			const automaticShuffle = Vue.ref(true)
 			const correctAnswerStyles = ["spinRightEffect","spinLeftEffect"]
-			const goodPoints = Vue.ref(10)
 			const incorrectAnswerStyles = ["shakeEffect"]
 			const isLoaded = Vue.ref(false)
 			const languages = Vue.ref([])
 			const languageFrom = Vue.ref("")
 			const languageTo = Vue.ref("")
-			const minusPoints = Vue.ref(5)
 			const processing = Vue.ref(false)
 			const scoreLocal = Vue.ref(score)
 			const word = Vue.ref("")
 			const showTranslated = Vue.ref(false)
 			let shuffledItem = {}
 			const wordsHistory = Vue.ref([])
+			const pointsButtons = Vue.ref([])
 			const clipboardWord = Vue.ref(null)
+			let pointsButtonsClearHandle = null
+			let showPointsTimerBarColor = Vue.ref(null)
 
 			const randomEffect = function(items) {
 				return items[Math.floor(Math.random()*items.length)];
@@ -97,7 +103,68 @@ const Shuffle = {
 				shuffleLetters();
 			}
 
-			const calculateScore = function(isCorrect) {
+			const playVoice = function(readText) {
+				try {
+					if(!userSettings.playVoice) {
+						return
+					}
+					readText += '';
+					if(!readText || !readText.length) {
+						return;
+					}
+					var msg = new SpeechSynthesisUtterance();
+					msg.text = readText;
+					window.speechSynthesis.speak(msg);
+				} catch(e) {
+					console.warn('playVoice warn')
+				}
+			}
+
+			const clearPointsButtons = function() {
+				showPointsTimerBarColor.value = null
+				if(pointsButtonsClearHandle) {
+					clearTimeout(pointsButtonsClearHandle)
+					pointsButtonsClearHandle = null
+				}
+				pointsButtons.value = []
+			}
+
+			const generatePointsOptions = function(isCorrect) {
+				showPointsTimerBarColor.value = null
+				setTimeout(function() {showPointsTimerBarColor.value = isCorrect ? '#218838' : '#c82333'})
+				
+				if(isCorrect) {
+					pointsButtons.value = [
+						{points: 10},
+						{points: 15},
+						{points: 20},
+						{points: 25},
+						{points: 30}
+					]
+				} else {
+					pointsButtons.value = [
+						{points: -5},
+						{points: -10},
+						{points: -20},
+						{points: -30},
+						{points: -40}
+					]
+				}
+
+				if(pointsButtonsClearHandle) {
+					clearTimeout(pointsButtonsClearHandle)
+					pointsButtonsClearHandle = null
+				}
+
+				pointsButtonsClearHandle = setTimeout(function() {
+					clearPointsButtons()
+				}, 5000)
+			}
+
+			const calculateScore = function(points) {
+				clearPointsButtons()
+				points = Number.isInteger(points) ? points : 0
+				var isCorrect = (points > 0)
 				scoreLocal.value.attempts++;
 				
 				if(isCorrect) {
@@ -111,8 +178,10 @@ const Shuffle = {
 						playSound('bad')
 					}
 				}
+
+				playVoice(points)
 				
-				scoreLocal.value.points = scoreLocal.value.correctAnswers*goodPoints.value - scoreLocal.value.incorrectAnswers*minusPoints.value;
+				scoreLocal.value.points += points;
 				scoreLocal.value.score = scoreLocal.value.attempts == 0 ? 0 : ((100*scoreLocal.value.correctAnswers)/(scoreLocal.value.attempts)).toFixed(0);
 				
 				var whatEffect = isCorrect ? randomEffect(correctAnswerStyles) : randomEffect(incorrectAnswerStyles);
@@ -142,6 +211,7 @@ const Shuffle = {
 			}
 			
 			const shuffleLetters = function() {
+				clearPointsButtons()
 				setTimeout(function () {
 					var container = $("#shuffledWord");
 					var textToBeShuffled = word.value
@@ -257,20 +327,21 @@ const Shuffle = {
 				editWord,
 				fillLanguagesDropdowns,
 				flipToFrom,
+				generatePointsOptions,
 				goBack,
 				goForth,
-				goodPoints,
 				isLoaded,
 				languages,
 				languageFrom,
 				languageTo,
-				minusPoints,
+				pointsButtons,
 				processing,
 				randomEffect,
 				scoreLocal,
 				showTranslated,
 				shuffleLetters,
 				shuffleWord,
+				showPointsTimerBarColor,
 				word,
 				wordsHistory
 			}

@@ -38,6 +38,11 @@ app.component('user-settings-popup', {
 										&nbsp;
 										<label style="cursor: pointer" for="playGoForthSound">Play next word sound</label>
 									</div>
+									<div class="container">
+										<input type="checkbox" name="playVoice" id="playVoice" v-model="playVoice">
+										&nbsp;
+										<label style="cursor: pointer" for="playVoice">Read points per action</label>
+									</div>
 
 									<button style="display: none" type="submit" @click="onSubmit"></button>
 								</form>
@@ -61,6 +66,7 @@ app.component('user-settings-popup', {
 		const playSkipAnswerSound = Vue.ref(false)
 		const playGoBackSound = Vue.ref(false)
 		const playGoForthSound = Vue.ref(false)
+		const playVoice = Vue.ref(false)
 
 		const saveUserSettings = function(addAnother) {
 			userSettings.playGoodAnswerSound = playGoodAnswerSound.value
@@ -68,6 +74,7 @@ app.component('user-settings-popup', {
 			userSettings.playSkipAnswerSound = playSkipAnswerSound.value
 			userSettings.playGoBackSound = playGoBackSound.value
 			userSettings.playGoForthSound = playGoForthSound.value
+			userSettings.playVoice = playVoice.value
 			setCookie('SFUserSettings', btoa(escape(JSON.stringify(userSettings))), 365)
 			$('#userSettingsModal').modal('toggle');
 		}
@@ -90,6 +97,7 @@ app.component('user-settings-popup', {
 				playSkipAnswerSound.value = userSettings.playSkipAnswerSound
 				playGoBackSound.value = userSettings.playGoBackSound
 				playGoForthSound.value = userSettings.playGoForthSound
+				playVoice.value = userSettings.playVoice
 			});
 		})
 
@@ -101,6 +109,7 @@ app.component('user-settings-popup', {
 			playSkipAnswerSound,
 			playGoBackSound,
 			playGoForthSound,
+			playVoice,
 			header,
 			errorMessageText,
 			saveUserSettings,
