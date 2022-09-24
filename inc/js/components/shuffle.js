@@ -44,7 +44,7 @@ const Shuffle = {
 				<div class="container">
 					<button type="button" class="btn btn-light" v-on:click="shuffleWord(true)">Shuffle another</button>
 					&nbsp;
-					<button type="button" class="btn btn-light" v-on:click="cleanScore()">Clean Score</button>
+					<button type="button" class="btn btn-light" v-on:click="shouldCleanScore()">Clean Score</button>
 				</div>
 				<div v-if="wordsHistory.length || clipboardWord" class="container">
 					<a v-if="wordsHistory.length" href="#" v-on:click="goBack()"><i class="fa fa-arrow-left" aria-hidden="true"></i>&nbsp;previous word</a>
@@ -272,6 +272,16 @@ const Shuffle = {
 				shuffleLetters();
 			}
 			
+			const shouldCleanScore = function() {
+				if(scoreLocal.value.displayed == 0) {
+					return
+				}
+				var test = confirm('Clean score?')
+				if(test) {
+					cleanScore()
+				}
+			}
+
 			const cleanScore = function() {
 				$(".score").addClass("hidden");
 				
@@ -288,6 +298,73 @@ const Shuffle = {
 					
 					$(".score").removeClass("hidden");
 				}, 500)
+			}
+
+			const manageKeyDown = function(e) {
+				try {
+					if(!e || !e.key || !window) {
+						return
+					}
+
+					if(!$("#shuffleBox").is(":visible")) {
+						return
+					}
+
+					if($('.modal.show').length) {
+						return
+					}
+				
+					console.log('shuffle manageKeyDown ', e.key);
+
+					// There are many cases in switch because Edge and Chrome have different keys' names. I could use keyCodes, but they are harder to read and maintain imo.
+					switch (e.key) {
+						case '-':
+							break;
+						case '=':
+						case '+':
+							break;
+						case 'Esc':
+						case 'Escape':
+							shouldCleanScore();
+							break;
+						case 'Left':
+						case 'ArrowLeft':
+							goBack();
+							break;
+						case 'Right':
+						case 'ArrowRight':
+							if(clipboardWord.value && clipboardWord.value.length) {
+								goForth();
+							} else {
+								shuffleWord(true)
+							}
+							break;
+						case 'b':
+						case 'B':
+							if(showPointsTimerBarColor.value && pointsButtons.value && pointsButtons.value.length) {
+								calculateScore(pointsButtons.value[0].points)
+							} else {
+								generatePointsOptions(false);
+							}
+							break;
+						case ' ':
+						case 'Enter':
+							if(showPointsTimerBarColor.value && pointsButtons.value && pointsButtons.value.length) {
+								calculateScore(pointsButtons.value[0].points)
+							} else {
+								generatePointsOptions(true);
+							}
+							break
+						case 'ArrowUp':
+						case 'Up':
+							break;
+						case 'Down':
+						case 'ArrowDown':
+							break;
+					}
+				} catch(e) {
+					console.warn('manageKeyDown warn');
+				}
 			}
 
 			Vue.watch(showTranslated, (showTranslatedValue, oldShowTranslatedValue) => {
@@ -315,6 +392,7 @@ const Shuffle = {
 						shuffleLetters();
 					}
 				});	
+				window.mittEmitter.on('manageKeyDown', manageKeyDown);	
 			})
 	
 			isLoaded.value = sharedDictionaryData.loaded
@@ -338,6 +416,7 @@ const Shuffle = {
 				processing,
 				randomEffect,
 				scoreLocal,
+				shouldCleanScore,
 				showTranslated,
 				shuffleLetters,
 				shuffleWord,
