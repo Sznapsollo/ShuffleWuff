@@ -314,7 +314,7 @@ const Shuffle = {
 						return
 					}
 				
-					console.log('shuffle manageKeyDown ', e.key);
+					// console.log('shuffle manageKeyDown ', e.key);
 
 					// There are many cases in switch because Edge and Chrome have different keys' names. I could use keyCodes, but they are harder to read and maintain imo.
 					switch (e.key) {
