@@ -157,6 +157,9 @@ var app = Vue.createApp({
 				saveWord(args);
 			}); 
 			loadUserSettings()
+			document.addEventListener('keydown', function(e) {
+				window.mittEmitter.emit('manageKeyDown', e);
+			});
 		})
 
 		loadDictionaryData()
