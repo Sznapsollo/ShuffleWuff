@@ -221,6 +221,7 @@ const Shuffle = {
 					container.shuffleLetters({
 						"text": textToBeShuffled
 					});
+					$(':focus').blur();
 				});
 			}
 
