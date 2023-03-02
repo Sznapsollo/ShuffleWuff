@@ -76,7 +76,7 @@ var app = Vue.createApp({
 				sharedDictionaryData.loaded = true;
 				requestInProgress.value = false;
 				window.mittEmitter.emit('dataLoaded', false);
-				console.log(response);
+				console.log(error);
 		  });
 		}
 
@@ -95,7 +95,7 @@ var app = Vue.createApp({
 				sharedDictionaryData.loaded = false;
 				requestInProgress.value = false;
 				window.mittEmitter.emit('dataLoaded', false);
-				console.log(response);
+				console.log(error);
 		  })
 		}
 
