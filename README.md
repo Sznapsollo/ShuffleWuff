@@ -43,5 +43,5 @@ In case you cannot add words - when you add word and click save, the dictionary 
 
 If you want to change paths to translator, services files, change from/to translate dropdown values or define default translate dropdown values - you can change all that in **<a href="https://github.com/Sznapsollo/ShuffleWuff/blob/master/settings.js" target="_blank">"settings.js"</a>** file.
 
-Take care! 
+Take care!!
 Wanna touch base? office@webproject.waw.pl
